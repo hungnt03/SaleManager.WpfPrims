@@ -1,0 +1,29 @@
+﻿using Prism.Ioc;
+using Prism.Modularity;
+using Prism.Regions;
+using SaleManager.Wpf.Admin.Views;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SaleManager.Wpf.Admin
+{
+    public class AdminModule : IModule
+    {
+        public void OnInitialized(IContainerProvider containerProvider)
+        {
+            var regionManager = containerProvider.Resolve<IRegionManager>();
+            regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(CategoryListView));
+            regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(CategoryView));
+            
+            regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(CustomerView));
+        }
+
+        public void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+
+        }
+    }
+}
