@@ -6,17 +6,25 @@ using SaleManager.Wpf.Inflastructor;
 using SaleManager.Wpf.Inflastructor.Models;
 using System.Collections.Generic;
 using Prism.Interactivity.InteractionRequest;
+using System;
+using MaterialDesignThemes.Wpf;
+using Prism.Services.Dialogs;
+using SaleManager.Wpf.Inflastructor.Views;
+using SaleManager.Wpf.Admin.Views;
 
 namespace SaleManager.Wpf.Admin.ViewModels
 {
     public class CategoryViewModel : ViewModelBase, INavigationAware
     {
         private readonly IRegionManager _regionManager;
+        private readonly IDialogService _dialogService;
         private CategoryModel _category = new CategoryModel();
         public DelegateCommand OnSave { get; private set; }
         public DelegateCommand OnDelete { get; private set; }
         public bool _isEnable = false;
-        
+        private string DialogResult { set; get; }
+        //public InteractionRequest<IConfirmation> ConfirmationRequest { get; set; }
+
         public CategoryModel Category
         {
             get { return _category; }
@@ -31,14 +39,19 @@ namespace SaleManager.Wpf.Admin.ViewModels
                 OnDelete.RaiseCanExecuteChanged();
             }
         }
-        public CategoryViewModel(IRegionManager regionManager):base()
+        public CategoryViewModel(IRegionManager regionManager, IDialogService dialogService) :base()
         {
             _regionManager = regionManager;
+            _dialogService = dialogService;
             OnSave = new DelegateCommand(Save);
             OnDelete = new DelegateCommand(Delete, CanDelete);
+            //ConfirmationRequest = new InteractionRequest<IConfirmation>();
         }
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            if (navigationContext.Parameters.ContainsKey("Result"))
+                DialogResult = navigationContext.Parameters.GetValue<string>("Result");
+            
             var category = navigationContext.Parameters["category"] as CategoryModel;
             if (category != null)
             {
@@ -62,18 +75,34 @@ namespace SaleManager.Wpf.Admin.ViewModels
             else
                 response = await RestApiUtils.Instance.Post("api/category/add", content);
             if (response.IsSuccess())
-                _regionManager.RequestNavigate("ContentMenuRegion", "CategoryListView");
+                _regionManager.RequestNavigate("ContentMenuRegion", nameof(CategoryListView));
         }
         private async void Delete()
         {
+            IDialogResult result = null;
+            _dialogService.ShowDialog(nameof(ConfirmDialogView), 
+                new DialogParameters 
+                { 
+                    { "Content", "Xác nhận xoá bản ghi" },
+                    { "Parent", "CategoryView" }
+                }
+                , ret => result = ret);
+            //var answer = "";
+            //ConfirmationRequest.Raise(new Confirmation
+            //{
+            //    Title = "Confirmation",
+            //    Content = "Confirmation Message"
+            //},
+            //    r => answer = r.Confirmed ? "Confirmed" : "Not Confirmed");
+            //if (answer.Equals("Not Confirmed"))
+            //    return;
             var content = new Dictionary<string, object>{
               { "id", Category.Id }
             };
             var json = await RestApiUtils.Instance.Post("api/category/delete", content);
             if (json.IsSuccess())
-                _regionManager.RequestNavigate("ContentMenuRegion", "CategoryListView");
+                _regionManager.RequestNavigate("ContentMenuRegion", nameof(CategoryListView));
         }
-
         private bool CanSave()
         {
             return true;
@@ -82,9 +111,6 @@ namespace SaleManager.Wpf.Admin.ViewModels
         {
             return IsEnable;
         }
-
-
-
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
             //var category = navigationContext.Parameters["category"] as CategoryModel;
@@ -94,10 +120,6 @@ namespace SaleManager.Wpf.Admin.ViewModels
             //    return true;
             return true;
         }
-
-        public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-
-        }
+        public void OnNavigatedFrom(NavigationContext navigationContext) { }
     }
 }

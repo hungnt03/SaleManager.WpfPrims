@@ -2,6 +2,7 @@
 using Prism.Modularity;
 using Prism.Regions;
 using SaleManager.Wpf.Admin.Views;
+using SaleManager.Wpf.Inflastructor.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace SaleManager.Wpf.Admin
             regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(CategoryView));
             
             regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(CustomerView));
+            regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(ConfirmDialogView));
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
