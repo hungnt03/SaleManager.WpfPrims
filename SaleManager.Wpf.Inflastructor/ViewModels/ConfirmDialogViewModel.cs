@@ -20,37 +20,27 @@ namespace SaleManager.Wpf.Inflastructor.ViewModels
         private IRegionManager _regionManager { get; }
         private IDialogService _dialogService { set; get; }
         private CompositeDisposable DisposeCollection = new CompositeDisposable();
-        private string _parent;
         private string _content;
 
         public event Action<IDialogResult> RequestClose;
 
-        public DelegateCommand YesCommand { set; get; }
-        public DelegateCommand NoCommand { set; get; }
+        public DelegateCommand<object> YesCommand { set; get; }
+        public DelegateCommand<object> NoCommand { set; get; }
         public ConfirmDialogViewModel(IDialogService dialogService, IRegionManager regionManager)
         {
             _regionManager = regionManager;
             _dialogService = dialogService;
 
-            YesCommand = new DelegateCommand(Yes);
-            NoCommand = new DelegateCommand(No);
+            YesCommand = new DelegateCommand<object>(Yes);
+            NoCommand = new DelegateCommand<object>(No);
         }
-        public void OnNavigatedTo(NavigationContext navigationContext)
+        private void No(object button)
         {
-            if (navigationContext.Parameters.ContainsKey("Content"))
-                Content = navigationContext.Parameters.GetValue<string>("Content");
-            if (navigationContext.Parameters.ContainsKey("Parent"))
-                Parent = navigationContext.Parameters.GetValue<string>("Parent");
+            RequestClose(new DialogResult(button is ButtonResult buttonResult ? buttonResult : ButtonResult.No));
         }
-        private void No()
+        private void Yes(object button)
         {
-            var parameters = new DialogParameters { { "Result", "No" } };
-            _regionManager.RequestNavigate("ContentMenuRegion", Parent, parameters);
-        }
-        private void Yes()
-        {
-            var parameters = new DialogParameters { { "Result", "Yes" } };
-            _regionManager.RequestNavigate("ContentMenuRegion", Parent, parameters);
+            RequestClose(new DialogResult(button is ButtonResult buttonResult ? buttonResult : ButtonResult.Yes));
         }
 
         public bool CanCloseDialog() => true;
@@ -59,21 +49,15 @@ namespace SaleManager.Wpf.Inflastructor.ViewModels
         {
             
         }
-
         public void OnDialogOpened(IDialogParameters parameters)
         {
-            
+            if(parameters.ContainsKey("Content"))
+                Content = parameters.GetValue<string>("Content");
         }
-
         public string Content
         {
             get { return _content; }
             set { SetProperty(ref _content, value); }
-        }
-        public string Parent
-        {
-            get { return _parent; }
-            set { SetProperty(ref _parent, value); }
         }
 
         public string Title => "";

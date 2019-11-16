@@ -2,6 +2,8 @@
 using Prism.Mvvm;
 using Prism.Regions;
 using SaleManager.Wpf.Inflastructor;
+using SaleManager.Wpf.Models;
+using System.Collections.Generic;
 
 namespace SaleManager.Wpf.ViewModels
 {
@@ -40,7 +42,12 @@ namespace SaleManager.Wpf.ViewModels
         {
             var logged = await RestApiUtils.Instance.Login(Username, Password);
             if (logged && navigatePath != null)
+            {
+                var response = await RestApiUtils.Instance.Post("api/user/current", new Dictionary<string, object>());
+                var user = Newtonsoft.Json.JsonConvert.DeserializeObject<ApplicationUserModel>(response.Data);
+                MainWindowViewModel.UserName = user.FirstName + user.LastName;
                 _regionManager.RequestNavigate("ContentRegion", navigatePath);
+            }
             else
                 Messenger = "Tên đăng nhập hoặc mật khẩu không đúng!";
         }

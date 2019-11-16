@@ -33,25 +33,22 @@ namespace SaleManager.Wpf.Admin.ViewModels
         public bool IsEnable
         {
             get { return _isEnable; }
-            set 
-            { 
+            set
+            {
                 SetProperty(ref _isEnable, value);
                 OnDelete.RaiseCanExecuteChanged();
             }
         }
-        public CategoryViewModel(IRegionManager regionManager, IDialogService dialogService) :base()
+        public CategoryViewModel(IRegionManager regionManager, IDialogService dialogService) : base()
         {
             _regionManager = regionManager;
             _dialogService = dialogService;
-            OnSave = new DelegateCommand(Save);
+            OnSave = new DelegateCommand(Save, CanSave);
             OnDelete = new DelegateCommand(Delete, CanDelete);
             //ConfirmationRequest = new InteractionRequest<IConfirmation>();
         }
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            if (navigationContext.Parameters.ContainsKey("Result"))
-                DialogResult = navigationContext.Parameters.GetValue<string>("Result");
-            
             var category = navigationContext.Parameters["category"] as CategoryModel;
             if (category != null)
             {
@@ -64,49 +61,47 @@ namespace SaleManager.Wpf.Admin.ViewModels
 
         private async void Save()
         {
-            var content = new Dictionary<string, object>{
-              { "Id", Category.Id },
-              { "Name", Category.Name },
-              { "Description", Category.Description },
-            };
-            ResponseData response;
-            if(IsEnable)
-                response = await RestApiUtils.Instance.Post("api/category/update", content);
-            else
-                response = await RestApiUtils.Instance.Post("api/category/add", content);
-            if (response.IsSuccess())
-                _regionManager.RequestNavigate("ContentMenuRegion", nameof(CategoryListView));
+            if (!this.HasErrors)
+            {
+                var content = new Dictionary<string, object>{
+                  { "Id", Category.Id },
+                  { "Name", Category.Name },
+                  { "Description", Category.Description },
+                };
+                ResponseData response;
+                if (IsEnable)
+                    response = await RestApiUtils.Instance.Post("api/category/update", content);
+                else
+                    response = await RestApiUtils.Instance.Post("api/category/add", content);
+                if (response.IsSuccess())
+                    _regionManager.RequestNavigate("ContentMenuRegion", nameof(CategoryListView));
+            }
         }
         private async void Delete()
         {
             IDialogResult result = null;
-            _dialogService.ShowDialog(nameof(ConfirmDialogView), 
-                new DialogParameters 
-                { 
+            _dialogService.ShowDialog(nameof(ConfirmDialogView),
+                new DialogParameters
+                {
                     { "Content", "Xác nhận xoá bản ghi" },
                     { "Parent", "CategoryView" }
                 }
                 , ret => result = ret);
-            //var answer = "";
-            //ConfirmationRequest.Raise(new Confirmation
-            //{
-            //    Title = "Confirmation",
-            //    Content = "Confirmation Message"
-            //},
-            //    r => answer = r.Confirmed ? "Confirmed" : "Not Confirmed");
-            //if (answer.Equals("Not Confirmed"))
-            //    return;
-            var content = new Dictionary<string, object>{
-              { "id", Category.Id }
-            };
-            var json = await RestApiUtils.Instance.Post("api/category/delete", content);
-            if (json.IsSuccess())
-                _regionManager.RequestNavigate("ContentMenuRegion", nameof(CategoryListView));
+
+            if (result.Result == ButtonResult.Yes)
+            {
+                var content = new Dictionary<string, object>{{ "id", Category.Id }};
+                var response = await RestApiUtils.Instance.Post("api/category/delete", content);
+                if (response.IsSuccess())
+                    _regionManager.RequestNavigate("ContentMenuRegion", nameof(CategoryListView));
+            }
         }
         private bool CanSave()
         {
             return true;
+                //!this.HasErrors && !string.IsNullOrWhiteSpace(Category.Name);
         }
+
         private bool CanDelete()
         {
             return IsEnable;
@@ -120,6 +115,9 @@ namespace SaleManager.Wpf.Admin.ViewModels
             //    return true;
             return true;
         }
-        public void OnNavigatedFrom(NavigationContext navigationContext) { }
+        public void OnNavigatedFrom(NavigationContext navigationContext) 
+        {
+            var a = 1;
+        }
     }
 }

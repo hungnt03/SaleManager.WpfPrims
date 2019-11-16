@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace SaleManager.Wpf.Admin.ViewModels
 {
-    public class CategoryListViewModel : BindableBase
+    public class CategoryListViewModel : BindableBase, INavigationAware
     {
         private ObservableCollection<CategoryModel> _categories;
         private CategoryModel _selectedItem;
@@ -46,14 +46,25 @@ namespace SaleManager.Wpf.Admin.ViewModels
         }
         private async void InitList()
         {
-            if (Categories == null)
-                Categories = new ObservableCollection<CategoryModel>();
+            Categories = new ObservableCollection<CategoryModel>();
             var json = await RestApiUtils.Instance.Get("api/category/getall");
             var datas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CategoryModel>>(json.Data);
             foreach (var elm in datas)
             {
                 Categories.Add(new CategoryModel(elm.Id, elm.Name, elm.Description));
             }
+        }
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            InitList();
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext) => true;
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            
         }
     }
 }

@@ -15,6 +15,7 @@ namespace SaleManager.Wpf.ViewModels
         private string _title = "Prism Unity Application";
         IContainerExtension _container;
         IRegionManager _regionManager;
+        public static string UserName { get; set; }
         public string Title
         {
             get { return _title; }

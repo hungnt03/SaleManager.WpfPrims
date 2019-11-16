@@ -21,6 +21,7 @@ namespace SaleManager.Wpf.Admin.Models
             set { SetProperty(ref _id, value); }
         }
         [StringLength(50, ErrorMessage = "Vui lòng nhập dưới {1} ký tự.")]
+        [Required(ErrorMessage = "Trường không được để trống")]
         public string Name
         {
             get { return _name; }
