@@ -25,7 +25,8 @@ namespace SaleManager.Wpf.Admin
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-
+            containerRegistry.RegisterForNavigation<CategoryListView>();
+            containerRegistry.RegisterForNavigation<CategoryView>();
         }
     }
 }

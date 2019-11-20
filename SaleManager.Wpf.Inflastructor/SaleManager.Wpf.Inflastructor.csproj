@@ -140,8 +140,12 @@
     <Compile Include="RestApiUtils.cs" />
     <Compile Include="ViewModelBase.cs" />
     <Compile Include="ViewModels\ConfirmDialogViewModel.cs" />
+    <Compile Include="ViewModels\NotificationDialogViewModel.cs" />
     <Compile Include="Views\ConfirmDialogView.xaml.cs">
       <DependentUpon>ConfirmDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NotificationDialogView.xaml.cs">
+      <DependentUpon>NotificationDialogView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +157,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\ConfirmDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NotificationDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

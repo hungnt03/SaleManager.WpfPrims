@@ -1,4 +1,6 @@
 ﻿using Prism.Interactivity.InteractionRequest;
+using Prism.Services.Dialogs;
+using SaleManager.Wpf.Inflastructor.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,32 +11,24 @@ namespace SaleManager.Wpf.Inflastructor
 {
     public abstract class ViewModelBase : AddBindableBase
     {
-        [Obsolete]
-        public InteractionRequest<IConfirmation> ConfirmationRequest { get; set; }
-        [Obsolete]
-        public InteractionRequest<INotification> NotificationRequest { get; set; }
-
-        [Obsolete]
-        public ViewModelBase()
+        private readonly IDialogService _dialogService;
+        public ViewModelBase(IDialogService dialogService)
         {
-            ConfirmationRequest = new InteractionRequest<IConfirmation>();
-            NotificationRequest = new InteractionRequest<INotification>();
+            _dialogService = dialogService;
         }
-
-        public void ConfirmDeleteDialog()
+        public void ExecuteAction(Action action)
         {
-            ConfirmationRequest.Raise(new Confirmation { Title = "Xác nhận", Content = "Bạn có muốn xoá bản ghi?" }, OnDialogClosed);
-        }
-
-        public virtual void OnDialogClosed(IConfirmation confirmation)
-        {
-            if (confirmation.Confirmed)
+            try
             {
-                //perform the confirmed action...
+                action();
             }
-            else
+            catch (Exception ex)
             {
-
+                _dialogService.ShowDialog(nameof(NotificationDialogView),
+                    new DialogParameters
+                    {{ "Content", "Có lỗi xảy ra, vui lòng thử lại." + Environment.NewLine
+                        + "Err:" + ex.Message}}
+                    , ret => { });
             }
         }
     }

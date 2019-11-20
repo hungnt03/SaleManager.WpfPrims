@@ -1,7 +1,9 @@
 ﻿using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
+using SaleManager.Wpf.Models;
 using SaleManager.Wpf.Views;
+using SaleManager.Wpf.Views.Menu;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +17,7 @@ namespace SaleManager.Wpf.ViewModels
         private string _title = "Prism Unity Application";
         IContainerExtension _container;
         IRegionManager _regionManager;
-        public static string UserName { get; set; }
+        public static ApplicationUserModel CurrentUser { set; get; }
         public string Title
         {
             get { return _title; }

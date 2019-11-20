@@ -1,5 +1,4 @@
 ﻿using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Services.Dialogs;
 using SaleManager.Wpf.Admin.Models;
@@ -8,24 +7,27 @@ using SaleManager.Wpf.Inflastructor;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SaleManager.Wpf.Admin.ViewModels
 {
-    public class CategoryListViewModel : ViewModelBase, INavigationAware
+    public class CustomerListViewModel : ViewModelBase, INavigationAware
     {
-        private ObservableCollection<CategoryModel> _categories;
-        private CategoryModel _selectedItem;
+        private ObservableCollection<CustomerModel> _customers;
+        private CustomerModel _selectedItem;
         private readonly IRegionManager _regionManager;
         public DelegateCommand OnCreate { get; private set; }
-        public ObservableCollection<CategoryModel> Categories
+        public ObservableCollection<CustomerModel> Customers
         {
-            get { return _categories; }
+            get { return _customers; }
             set
             {
-                SetProperty(ref _categories, value);
+                SetProperty(ref _customers, value);
             }
         }
-        public CategoryModel SelectedItem
+        public CustomerModel SelectedItem
         {
             get { return _selectedItem; }
             set
@@ -33,11 +35,11 @@ namespace SaleManager.Wpf.Admin.ViewModels
                 SetProperty(ref _selectedItem, value);
                 var parameters = new NavigationParameters();
                 parameters.Add("category", value);
-                _regionManager.RequestNavigate("ContentMenuRegion", "CategoryView",parameters);
+                _regionManager.RequestNavigate("ContentMenuRegion", "CustomerView", parameters);
             }
         }
 
-        public CategoryListViewModel(IRegionManager regionManager, IDialogService dialogService) : base(dialogService)
+        public CustomerListViewModel(IRegionManager regionManager, IDialogService dialogService) : base(dialogService)
         {
             _regionManager = regionManager;
             OnCreate = new DelegateCommand(Create);
@@ -47,18 +49,18 @@ namespace SaleManager.Wpf.Admin.ViewModels
         {
             Action a = () =>
             {
-                _regionManager.RequestNavigate("ContentMenuRegion", nameof(CategoryView));
+                _regionManager.RequestNavigate("ContentMenuRegion", nameof(CustomerView));
             };
             ExecuteAction(a);
         }
         private async void InitList()
         {
-            Categories = new ObservableCollection<CategoryModel>();
-            var json = await RestApiUtils.Instance.Get("api/category/getall");
-            var datas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CategoryModel>>(json.Data);
+            Customers = new ObservableCollection<CustomerModel>();
+            var json = await RestApiUtils.Instance.Get("api/customer/getall");
+            var datas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomerModel>>(json.Data);
             foreach (var elm in datas)
             {
-                Categories.Add(new CategoryModel(elm.Id, elm.Name, elm.Description));
+                //Customers.Add(new CustomerModel(elm.Id, elm.Name, elm.Description));
             }
         }
 
@@ -71,7 +73,7 @@ namespace SaleManager.Wpf.Admin.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            
+
         }
     }
 }

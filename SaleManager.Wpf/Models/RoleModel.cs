@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace SaleManager.Wpf.Models
 {
-    public class ApplicationUserModel
+    public class RoleModel
     {
-        public UserModel User { set; get; }
-        public List<string> Roles { set; get; }
+        public List<string> Roles;
     }
 }

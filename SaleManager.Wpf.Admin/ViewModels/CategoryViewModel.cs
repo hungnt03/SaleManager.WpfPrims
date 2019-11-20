@@ -39,11 +39,13 @@ namespace SaleManager.Wpf.Admin.ViewModels
                 OnDelete.RaiseCanExecuteChanged();
             }
         }
-        public CategoryViewModel(IRegionManager regionManager, IDialogService dialogService) : base()
+        public CategoryViewModel(IRegionManager regionManager, IDialogService dialogService) : base(dialogService)
         {
             _regionManager = regionManager;
             _dialogService = dialogService;
-            OnSave = new DelegateCommand(Save, CanSave);
+            OnSave = new DelegateCommand(Save, CanSave)
+                .ObservesProperty(() => this.Category.Name)
+                .ObservesProperty(() => this.Category.Description);
             OnDelete = new DelegateCommand(Delete, CanDelete);
             //ConfirmationRequest = new InteractionRequest<IConfirmation>();
         }
@@ -58,66 +60,62 @@ namespace SaleManager.Wpf.Admin.ViewModels
             else
                 Category = new CategoryModel();
         }
-
-        private async void Save()
+        private void Save()
         {
             if (!this.HasErrors)
             {
-                var content = new Dictionary<string, object>{
+                Action a = async () =>
+                {
+                    var content = new Dictionary<string, object>{
                   { "Id", Category.Id },
                   { "Name", Category.Name },
                   { "Description", Category.Description },
                 };
-                ResponseData response;
-                if (IsEnable)
-                    response = await RestApiUtils.Instance.Post("api/category/update", content);
-                else
-                    response = await RestApiUtils.Instance.Post("api/category/add", content);
-                if (response.IsSuccess())
-                    _regionManager.RequestNavigate("ContentMenuRegion", nameof(CategoryListView));
+                    ResponseData response;
+                    if (IsEnable)
+                        response = await RestApiUtils.Instance.Post("api/category/update", content);
+                    else
+                        response = await RestApiUtils.Instance.Post("api/category/add", content);
+                    if (response.IsSuccess())
+                        _regionManager.RequestNavigate("ContentMenuRegion", nameof(CategoryListView));
+                };
+                ExecuteAction(a);
             }
         }
-        private async void Delete()
+        private void Delete()
         {
-            IDialogResult result = null;
-            _dialogService.ShowDialog(nameof(ConfirmDialogView),
-                new DialogParameters
-                {
-                    { "Content", "Xác nhận xoá bản ghi" },
-                    { "Parent", "CategoryView" }
-                }
-                , ret => result = ret);
-
-            if (result.Result == ButtonResult.Yes)
+            Action a = async () =>
             {
-                var content = new Dictionary<string, object>{{ "id", Category.Id }};
-                var response = await RestApiUtils.Instance.Post("api/category/delete", content);
-                if (response.IsSuccess())
-                    _regionManager.RequestNavigate("ContentMenuRegion", nameof(CategoryListView));
-            }
+                IDialogResult result = null;
+                _dialogService.ShowDialog(nameof(ConfirmDialogView),
+                    new DialogParameters
+                    {{ "Content", "Xác nhận xoá bản ghi" }}, ret => result = ret);
+
+                if (result.Result == ButtonResult.Yes)
+                {
+                    var content = new Dictionary<string, object> { { "id", Category.Id } };
+                    var response = await RestApiUtils.Instance.Post("api/category/delete", content);
+                    if (response.IsSuccess())
+                        _regionManager.Regions["ContentMenuRegion"].NavigationService.Journal.GoBack();
+                    //_regionManager.RequestNavigate("ContentMenuRegion", nameof(CategoryListView));
+                }
+            };
+            ExecuteAction(a);
         }
         private bool CanSave()
         {
-            return true;
-                //!this.HasErrors && !string.IsNullOrWhiteSpace(Category.Name);
+            //return true;
+            return !this.HasErrors && 
+                !string.IsNullOrWhiteSpace(Category.Name) && 
+                !string.IsNullOrWhiteSpace(Category.Description); ;
         }
-
         private bool CanDelete()
         {
             return IsEnable;
         }
-        public bool IsNavigationTarget(NavigationContext navigationContext)
+        public bool IsNavigationTarget(NavigationContext navigationContext) => true;
+        public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            //var category = navigationContext.Parameters["category"] as CategoryModel;
-            //if (category != null)
-            //    return Category != null;
-            //else
-            //    return true;
-            return true;
-        }
-        public void OnNavigatedFrom(NavigationContext navigationContext) 
-        {
-            var a = 1;
         }
     }
 }

@@ -3,6 +3,7 @@ using Prism.Modularity;
 using Prism.Unity;
 using SaleManager.Wpf.Inflastructor.ViewModels;
 using SaleManager.Wpf.Inflastructor.Views;
+using SaleManager.Wpf.ViewModels;
 using SaleManager.Wpf.Views;
 using SaleManager.Wpf.Views.Menu;
 using System.Windows;
@@ -23,6 +24,7 @@ namespace SaleManager.Wpf
         {
             containerRegistry.RegisterForNavigation<LoginView>();
             containerRegistry.RegisterForNavigation<MenuView>();
+            
             containerRegistry.RegisterDialog<ConfirmDialogView, ConfirmDialogViewModel>();
         }
 

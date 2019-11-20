@@ -1,13 +1,16 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
+using Prism.Services.Dialogs;
 using SaleManager.Wpf.Inflastructor;
 using SaleManager.Wpf.Models;
+using SaleManager.Wpf.Views.Menu;
+using System;
 using System.Collections.Generic;
 
 namespace SaleManager.Wpf.ViewModels
 {
-    public class LoginViewModel : BindableBase
+    public class LoginViewModel : ViewModelBase
     {
         private string _username;
         private string _password;
@@ -28,28 +31,38 @@ namespace SaleManager.Wpf.ViewModels
             get { return _mess; }
             set { SetProperty(ref _mess, value); }
         }
-        public DelegateCommand<string> OnLogin { get; private set; }
-        public LoginViewModel(IRegionManager regionManager)
+        public DelegateCommand OnLogin { get; private set; }
+        public LoginViewModel(IRegionManager regionManager, IDialogService dialogService):base(dialogService)
         {
             _regionManager = regionManager;
-            OnLogin = new DelegateCommand<string>(Login);
+            OnLogin = new DelegateCommand(Login, CanLogin)
+                .ObservesProperty(() => this.Username)
+                .ObservesProperty(() => this.Password);
 
             //DUMMY DATA
-            Username = "hungnt.hut56@gmail.com";
+            Username = "hungnt03";
             Password = "Root@123";
         }
-        private async void Login(string navigatePath)
+        private void Login()
         {
-            var logged = await RestApiUtils.Instance.Login(Username, Password);
-            if (logged && navigatePath != null)
+            Action a = async () =>
             {
-                var response = await RestApiUtils.Instance.Post("api/user/current", new Dictionary<string, object>());
-                var user = Newtonsoft.Json.JsonConvert.DeserializeObject<ApplicationUserModel>(response.Data);
-                MainWindowViewModel.UserName = user.FirstName + user.LastName;
-                _regionManager.RequestNavigate("ContentRegion", navigatePath);
-            }
-            else
-                Messenger = "Tên đăng nhập hoặc mật khẩu không đúng!";
+                var logged = await RestApiUtils.Instance.Login(Username, Password);
+                if (logged)
+                {
+                    var response = await RestApiUtils.Instance.Post("api/user/current", new Dictionary<string, object>());
+                    MainWindowViewModel.CurrentUser = Newtonsoft.Json.JsonConvert.DeserializeObject<ApplicationUserModel>(response.Data); ;
+                    _regionManager.RequestNavigate("ContentRegion", nameof(MenuView));
+                    _regionManager.RegisterViewWithRegion("HeaderRegion", typeof(HeaderView));
+                }
+                else
+                    Messenger = "Tên đăng nhập hoặc mật khẩu không đúng!";
+            };
+            ExecuteAction(a);
+        }
+        private bool CanLogin()
+        {
+            return !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace SaleManager.Wpf.Inflastructor
         public async Task<bool> Login(string username, string password)
         {
             var content = new Dictionary<string, string>{
-              { "Email", username },
+              { "Username", username },
               { "Password", password },
             };
             string json = JsonConvert.SerializeObject(content, Formatting.Indented);
@@ -47,6 +47,11 @@ namespace SaleManager.Wpf.Inflastructor
             token = Newtonsoft.Json.JsonConvert.DeserializeObject<TokenModel>(jsonStr);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
             return IsLogged();
+        }
+
+        public void Logout()
+        {
+            token = null;
         }
 
         public async Task<ResponseData> Post(string url, Dictionary<string, object> content)
