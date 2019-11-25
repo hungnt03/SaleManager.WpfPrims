@@ -67,10 +67,10 @@ namespace SaleManager.Wpf.Admin.ViewModels
                 Action a = async () =>
                 {
                     var content = new Dictionary<string, object>{
-                  { "Id", Category.Id },
-                  { "Name", Category.Name },
-                  { "Description", Category.Description },
-                };
+                        { "Id", Category.Id },
+                        { "Name", Category.Name },
+                        { "Description", Category.Description },
+                    };
                     ResponseData response;
                     if (IsEnable)
                         response = await RestApiUtils.Instance.Post("api/category/update", content);

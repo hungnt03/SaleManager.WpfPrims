@@ -7,9 +7,82 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+    <i:Interaction.Triggers>
+        <prism:InteractionRequestTrigger SourceObject="{Binding NotificationRequest}">
+            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
+        </prism:InteractionRequestTrigger>
+        <prism:InteractionRequestTrigger SourceObject="{Binding ConfirmationRequest}">
+            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
+        </prism:InteractionRequestTrigger>
+    </i:Interaction.Triggers>
+    <StackPanel>
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Content="Họ" Margin="5"/>
+            <TextBox Text="{Binding Account.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                     Grid.Row="0" Grid.Column="1" Margin="5" Width="250"/>
+            <TextBlock Text="{Binding ElementName=Account.FirstName, Path=(Validation.Errors)[0].ErrorContent}" 
+                       Grid.Row="1" Grid.Column="1"/>
+
+            <Label Content="Tên" Grid.Row="2" Grid.Column="0" Margin="5"/>
+            <TextBox Text="{Binding Account.LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                     Grid.Row="2" Grid.Column="1" Margin="5" Width="250"/>
+            <TextBlock Text="{Binding ElementName=Account.LastName, Path=(Validation.Errors)[0].ErrorContent}" 
+                       Grid.Row="3" Grid.Column="1"/>
+
+            <Label Content="Khả dụng" Margin="5" Grid.Column="0" Grid.Row="4"/>
+            <ToggleButton
+                Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left" Margin="5"
+                IsChecked="{Binding Account.IsEnable}" />
+
+            <Label Content="Quyền hạn" Margin="5" Grid.Column="0" Grid.Row="5"/>
+            <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left" Margin="5">
+                <ComboBox ItemsSource="{Binding Account.Roles}"
+                    materialDesign:HintAssist.Hint="Quyền hạn">
+                </ComboBox>
+            </StackPanel>
+            <ListBox Grid.Row="6" Grid.Column="1" ItemsSource="{Binding Account.CurrRoles}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <materialDesign:Chip Content="{Binding}" IsDeletable="True" DeleteClick="ButtonsDemoChip_OnDeleteClick"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Right">
+                <Button Content="Lưu"
+                        Command="{Binding OnSave}"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Width="100" />
+                <Button
+                    Command="{Binding OnDelete}"
+                    Width="100" Background="#b71c1c" Margin="5" Foreground="#ffffff">
+                    Xoá
+                </Button>
+            </StackPanel>
+        </Grid>
+    </StackPanel>
 </UserControl>

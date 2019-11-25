@@ -35,8 +35,10 @@ namespace SaleManager.Wpf.ViewModels.Menu
             Menus = new BindableCollection<MenuDetailViewModel>()
             {
                 new MenuDetailViewModel("CategoryListView", "Category", "BrandingWatermark"),
-                new MenuDetailViewModel("CustomerView", "Customer", "HumanMaleFemale")
+                new MenuDetailViewModel("CustomerView", "Customer", "HumanMaleFemale"),
             };
+            if (MainWindowViewModel.CurrentUser.Roles.Contains("admin"))
+                Menus.Add(new MenuDetailViewModel("AccountListView", "Account", "AccountTie"));
         }
 
     }

@@ -18,7 +18,7 @@ namespace SaleManager.Wpf.Admin.ViewModels
         private ObservableCollection<AccountModel> _accounts;
         private AccountModel _selectedItem;
         private readonly IRegionManager _regionManager;
-        public ObservableCollection<AccountModel> Categories
+        public ObservableCollection<AccountModel> Accounts
         {
             get { return _accounts; }
             set
@@ -41,16 +41,27 @@ namespace SaleManager.Wpf.Admin.ViewModels
         public AccountListViewModel(IRegionManager regionManager, IDialogService dialogService) : base(dialogService)
         {
             _regionManager = regionManager;
-            InitList();
+            //InitList();
         }
         private async void InitList()
         {
-            Categories = new ObservableCollection<AccountModel>();
-            var json = await RestApiUtils.Instance.Get("api/user/users");
+            Accounts = new ObservableCollection<AccountModel>();
+            Accounts.Clear();
+            var json = await RestApiUtils.Instance.Post("api/user/users", null);
             var datas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AccountModel>>(json.Data);
             foreach (var elm in datas)
             {
-                //Categories.Add(new AccountModel(elm.Id, elm.Name, elm.Description));
+                Accounts.Add(new AccountModel() 
+                {
+                    Id = elm.Id,
+                    Email = elm.Email,
+                    FirstName = elm.FirstName,
+                    LastName = elm.LastName,
+                    JoinDate = elm.JoinDate,
+                    Level = elm.Level,
+                    Username = elm.Username,
+                    IsEnable = elm.IsEnable
+                });
             }
         }
 

@@ -132,6 +132,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddBindableBase.cs" />
+    <Compile Include="Converters\BoolConverter.cs" />
+    <Compile Include="Converters\DateConverter.cs" />
     <Compile Include="Helpers\PasswordHelper.cs" />
     <Compile Include="Models\ResponseData.cs" />
     <Compile Include="Models\TokenModel.cs" />

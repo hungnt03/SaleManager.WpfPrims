@@ -24,5 +24,9 @@ namespace SaleManager.Wpf.Admin.Views
         {
             InitializeComponent();
         }
+        private void ButtonsDemoChip_OnDeleteClick(object sender, RoutedEventArgs e)
+        {
+            var a = 1;
+        }
     }
 }

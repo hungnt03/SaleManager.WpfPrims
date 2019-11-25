@@ -18,7 +18,9 @@ namespace SaleManager.Wpf.Admin
             var regionManager = containerProvider.Resolve<IRegionManager>();
             regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(CategoryListView));
             regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(CategoryView));
-            
+            regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(AccountListView));
+            regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(AccountView));
+
             regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(CustomerView));
             regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(ConfirmDialogView));
         }
@@ -27,6 +29,8 @@ namespace SaleManager.Wpf.Admin
         {
             containerRegistry.RegisterForNavigation<CategoryListView>();
             containerRegistry.RegisterForNavigation<CategoryView>();
+            containerRegistry.RegisterForNavigation<AccountListView>();
+            containerRegistry.RegisterForNavigation<AccountView>();
         }
     }
 }
