@@ -2,6 +2,7 @@
 using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Services.Dialogs;
+using SaleManager.Wpf.Admin.Views;
 using SaleManager.Wpf.Inflastructor;
 using SaleManager.Wpf.Models;
 using SaleManager.Wpf.Views.Menu;
@@ -32,16 +33,28 @@ namespace SaleManager.Wpf.ViewModels
             set { SetProperty(ref _mess, value); }
         }
         public DelegateCommand OnLogin { get; private set; }
+        public DelegateCommand OnCreateAccount { get; private set; }
+        public DelegateCommand OnFogotPassword { get; private set; }
         public LoginViewModel(IRegionManager regionManager, IDialogService dialogService):base(dialogService)
         {
             _regionManager = regionManager;
             OnLogin = new DelegateCommand(Login, CanLogin)
                 .ObservesProperty(() => this.Username)
                 .ObservesProperty(() => this.Password);
+            OnCreateAccount = new DelegateCommand(CreateAccount);
+            OnFogotPassword = new DelegateCommand(ForgotPassword);
 
             //DUMMY DATA
             Username = "hungnt03";
             Password = "Root@123";
+        }
+        private void ForgotPassword()
+        {
+
+        }
+        private void CreateAccount()
+        {
+            _regionManager.RequestNavigate("ContentMenuRegion", nameof(AccountCreateView));
         }
         private void Login()
         {

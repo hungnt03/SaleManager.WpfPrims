@@ -17,11 +17,11 @@ namespace SaleManager.Wpf.Admin
         {
             var regionManager = containerProvider.Resolve<IRegionManager>();
             regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(CategoryListView));
-            regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(CategoryView));
-            regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(AccountListView));
-            regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(AccountView));
+            //regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(CategoryView));
+            regionManager.RequestNavigate("ContentMenuRegion", nameof(AccountListView));
+            //regionManager.RequestNavigate("ContentMenuRegion", nameof(AccountView));
 
-            regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(CustomerView));
+            //regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(CustomerView));
             regionManager.RegisterViewWithRegion("ContentMenuRegion", typeof(ConfirmDialogView));
         }
 

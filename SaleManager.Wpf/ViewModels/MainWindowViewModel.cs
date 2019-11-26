@@ -1,4 +1,5 @@
-﻿using Prism.Ioc;
+﻿using MaterialDesignThemes.Wpf;
+using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
 using SaleManager.Wpf.Models;
@@ -18,6 +19,12 @@ namespace SaleManager.Wpf.ViewModels
         IContainerExtension _container;
         IRegionManager _regionManager;
         public static ApplicationUserModel CurrentUser { set; get; }
+        private static SnackbarMessageQueue _snackbar;
+        public SnackbarMessageQueue Snackbar
+        {
+            get { return _snackbar; }
+            set { SetProperty(ref _snackbar, value); }
+        }
         public string Title
         {
             get { return _title; }
@@ -29,6 +36,8 @@ namespace SaleManager.Wpf.ViewModels
             _container = container;
             _regionManager = regionManager;
             _regionManager.RegisterViewWithRegion("ContentRegion", typeof(LoginView));
+            Snackbar = new SnackbarMessageQueue();
+            Snackbar.Enqueue("Version 1.0");
         }
     }
 }

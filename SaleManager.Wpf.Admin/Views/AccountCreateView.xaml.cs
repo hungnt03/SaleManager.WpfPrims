@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace SaleManager.Wpf.Admin.Views
 {
     /// <summary>
-    /// Interaction logic for AccountView.xaml
+    /// Interaction logic for AccountCreateView.xaml
     /// </summary>
-    public partial class AccountView : UserControl
+    public partial class AccountCreateView : UserControl
     {
-        public AccountView()
+        public AccountCreateView()
         {
             InitializeComponent();
         }

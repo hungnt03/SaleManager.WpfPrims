@@ -16,32 +16,27 @@ namespace SaleManager.Wpf.Admin.ViewModels
     public class AccountListViewModel : ViewModelBase, INavigationAware
     {
         private ObservableCollection<AccountModel> _accounts;
-        private AccountModel _selectedItem;
         private readonly IRegionManager _regionManager;
+        IRegionNavigationJournal _journal;
+        public DelegateCommand<AccountModel> SelectedCommand { get; private set; }
         public ObservableCollection<AccountModel> Accounts
         {
             get { return _accounts; }
-            set
-            {
-                SetProperty(ref _accounts, value);
-            }
-        }
-        public AccountModel SelectedItem
-        {
-            get { return _selectedItem; }
-            set
-            {
-                SetProperty(ref _selectedItem, value);
-                var parameters = new NavigationParameters();
-                parameters.Add("account", value);
-                _regionManager.RequestNavigate("ContentMenuRegion", nameof(AccountView), parameters);
-            }
+            set { SetProperty(ref _accounts, value); }
         }
 
         public AccountListViewModel(IRegionManager regionManager, IDialogService dialogService) : base(dialogService)
         {
             _regionManager = regionManager;
-            //InitList();
+            SelectedCommand = new DelegateCommand<AccountModel>(AccountSelected);
+            InitList();
+        }
+        private void AccountSelected(AccountModel account)
+        {
+            var parameters = new NavigationParameters();
+            parameters.Add("account", account);
+            if (account != null)
+                _regionManager.RequestNavigate("ContentMenuRegion", nameof(AccountView), parameters);
         }
         private async void InitList()
         {
@@ -51,7 +46,7 @@ namespace SaleManager.Wpf.Admin.ViewModels
             var datas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AccountModel>>(json.Data);
             foreach (var elm in datas)
             {
-                Accounts.Add(new AccountModel() 
+                Accounts.Add(new AccountModel()
                 {
                     Id = elm.Id,
                     Email = elm.Email,
@@ -67,14 +62,11 @@ namespace SaleManager.Wpf.Admin.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            InitList();
+            _journal = navigationContext.NavigationService.Journal;
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext) => true;
 
-        public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-
-        }
+        public void OnNavigatedFrom(NavigationContext navigationContext){ }
     }
 }

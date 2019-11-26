@@ -59,7 +59,7 @@ namespace SaleManager.Wpf.Inflastructor
             string json = JsonConvert.SerializeObject(content, Formatting.Indented);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PostAsync(url, stringContent);
-            response.EnsureSuccessStatusCode();
+            //response.EnsureSuccessStatusCode();
             var result = await response.Content.ReadAsStringAsync();
             return new ResponseData(result, response.StatusCode);
         }

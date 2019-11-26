@@ -8,7 +8,7 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <i:Interaction.Triggers>
@@ -54,20 +54,12 @@
                 IsChecked="{Binding Account.IsEnable}" />
 
             <Label Content="Quyền hạn" Margin="5" Grid.Column="0" Grid.Row="5"/>
-            <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left" Margin="5">
-                <ComboBox ItemsSource="{Binding Account.Roles}"
-                    materialDesign:HintAssist.Hint="Quyền hạn">
-                </ComboBox>
-            </StackPanel>
-            <ListBox Grid.Row="6" Grid.Column="1" ItemsSource="{Binding Account.CurrRoles}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel />
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
+            <ListBox Grid.Row="5" Grid.Column="1" ItemsSource="{Binding Account.Roles, Mode=TwoWay}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <materialDesign:Chip Content="{Binding}" IsDeletable="True" DeleteClick="ButtonsDemoChip_OnDeleteClick"/>
+                        <CheckBox x:Name="MaterialDesignFilledTextFieldTextBoxEnabledComboBox"
+                            IsChecked="{Binding IsChecked, Mode=TwoWay}" Content="{Binding Label}">
+                        </CheckBox>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -77,10 +69,9 @@
                         Command="{Binding OnSave}"
                         Style="{StaticResource MaterialDesignRaisedButton}"
                         Width="100" />
-                <Button
-                    Command="{Binding OnDelete}"
-                    Width="100" Background="#b71c1c" Margin="5" Foreground="#ffffff">
-                    Xoá
+                <Button Content="Quay lại" Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding GoBackCommand}"
+                    Width="100" Margin="5">
                 </Button>
             </StackPanel>
         </Grid>

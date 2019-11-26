@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SaleManager.Wpf.Admin.Models
 {
-    class AccountCreateModel : AddBindableBase
+    public class AccountCreateModel : AddBindableBase
     {
         private string _username;
         private string _password;

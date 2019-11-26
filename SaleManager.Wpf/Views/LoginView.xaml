@@ -25,7 +25,8 @@
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="25"/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <materialDesign:PackIcon Kind="UserOutline" VerticalAlignment="Bottom" Height="20" Width="20"/>
             <TextBox Text="{Binding Username}" materialDesign:HintAssist.Hint="Tên đăng nhập" Grid.Column="1" Margin="5,0,5,0"/>
@@ -40,6 +41,19 @@
                     Style="{StaticResource MaterialDesignRaisedButton}" 
                     Content="Đăng nhập" 
                     Grid.Column="1" Grid.Row="3" Margin="5"/>
+            <StackPanel Grid.Column="1" Grid.Row="4">
+                <TextBlock HorizontalAlignment="Center">
+                    <Hyperlink Command="{Binding OnCreateAccount}" TextDecorations="None" Foreground="#536dfe">
+                        Tạo mới tài khoản
+                    </Hyperlink>
+                </TextBlock>
+                <TextBlock  HorizontalAlignment="Center">
+                    <Hyperlink Command="{Binding OnFogotPassword}" TextDecorations="None" Foreground="#607d8b">
+                        Quên mật khẩu
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
+            
         </Grid>
     </Grid>
 </UserControl>

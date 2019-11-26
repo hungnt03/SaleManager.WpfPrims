@@ -1,6 +1,9 @@
 ﻿using SaleManager.Wpf.Inflastructor;
+using SaleManager.Wpf.Inflastructor.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -18,19 +21,14 @@ namespace SaleManager.Wpf.Admin.Models
         private byte _level;
         private DateTime _joinDate;
         private bool _isEnable;
-        private List<string> _roles;
-        private List<string> _currRoles;
+        private ObservableCollection<CheckboxModel> _roles;
 
-        public List<string> CurrRoles
+        public AccountModel()
         {
-            get { return _currRoles; }
-            set
-            {
-                SetProperty(ref _currRoles, value);
-                this.ValidateProperty(value);
-            }
+            Roles = new ObservableCollection<CheckboxModel>();
+            
         }
-        public List<string> Roles
+        public ObservableCollection<CheckboxModel> Roles
         {
             get { return _roles; }
             set
