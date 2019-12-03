@@ -21,7 +21,7 @@
         </prism:InteractionRequestTrigger>
     </i:Interaction.Triggers>
     <StackPanel>
-        <Grid HorizontalAlignment="Center" Margin="10">
+        <Grid HorizontalAlignment="Center" Margin="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>

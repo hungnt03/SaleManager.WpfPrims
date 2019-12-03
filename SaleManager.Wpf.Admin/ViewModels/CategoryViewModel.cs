@@ -19,6 +19,7 @@ namespace SaleManager.Wpf.Admin.ViewModels
         private readonly IRegionManager _regionManager;
         private readonly IDialogService _dialogService;
         private CategoryModel _category = new CategoryModel();
+        IRegionNavigationJournal _journal;
         public DelegateCommand OnSave { get; private set; }
         public DelegateCommand OnDelete { get; private set; }
         public bool _isEnable = false;
@@ -51,6 +52,7 @@ namespace SaleManager.Wpf.Admin.ViewModels
         }
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            _journal = navigationContext.NavigationService.Journal;
             var category = navigationContext.Parameters["category"] as CategoryModel;
             if (category != null)
             {
@@ -71,13 +73,16 @@ namespace SaleManager.Wpf.Admin.ViewModels
                         { "Name", Category.Name },
                         { "Description", Category.Description },
                     };
-                    ResponseData response;
+                    bool isSuccess = false;
                     if (IsEnable)
-                        response = await RestApiUtils.Instance.Post("api/category/update", content);
+                        isSuccess = await RestApiUtils.Instance.Post("api/category/update", content);
                     else
-                        response = await RestApiUtils.Instance.Post("api/category/add", content);
-                    if (response.IsSuccess())
-                        _regionManager.RequestNavigate("ContentMenuRegion", nameof(CategoryListView));
+                        isSuccess = await RestApiUtils.Instance.Post("api/category/add", content);
+                    if (isSuccess) 
+                    {
+                        _regionManager.Regions["ContentMenuRegion"].NavigationService.Journal.GoBack();
+                        _journal.GoBack();
+                    }
                 };
                 ExecuteAction(a);
             }
@@ -94,10 +99,9 @@ namespace SaleManager.Wpf.Admin.ViewModels
                 if (result.Result == ButtonResult.Yes)
                 {
                     var content = new Dictionary<string, object> { { "id", Category.Id } };
-                    var response = await RestApiUtils.Instance.Post("api/category/delete", content);
-                    if (response.IsSuccess())
-                        _regionManager.Regions["ContentMenuRegion"].NavigationService.Journal.GoBack();
-                    //_regionManager.RequestNavigate("ContentMenuRegion", nameof(CategoryListView));
+                    var isSuccess = await RestApiUtils.Instance.Post("api/category/delete", content);
+                    if (isSuccess)
+                        _journal.GoBack();
                 }
             };
             ExecuteAction(a);

@@ -56,8 +56,8 @@ namespace SaleManager.Wpf.Admin.ViewModels
         private async void InitList()
         {
             Customers = new ObservableCollection<CustomerModel>();
-            var json = await RestApiUtils.Instance.Get("api/customer/getall");
-            var datas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomerModel>>(json.Data);
+            var datas = await RestApiUtils.Instance.Get<List<CustomerModel>>("api/customer/getall");
+            //var datas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomerModel>>(json.Data);
             foreach (var elm in datas)
             {
                 //Customers.Add(new CustomerModel(elm.Id, elm.Name, elm.Description));

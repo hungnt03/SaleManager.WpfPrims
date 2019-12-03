@@ -136,6 +136,7 @@
     <Compile Include="Converters\DateConverter.cs" />
     <Compile Include="Helpers\PasswordHelper.cs" />
     <Compile Include="Models\CheckboxModel.cs" />
+    <Compile Include="Models\NotifSentEvent.cs" />
     <Compile Include="Models\ResponseData.cs" />
     <Compile Include="Models\TokenModel.cs" />
     <Compile Include="NotifyPropertyChangedExtension.cs" />

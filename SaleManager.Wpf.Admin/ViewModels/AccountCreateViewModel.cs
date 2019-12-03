@@ -1,4 +1,5 @@
 ﻿using Prism.Commands;
+using Prism.Events;
 using Prism.Regions;
 using Prism.Services.Dialogs;
 using SaleManager.Wpf.Admin.Models;
@@ -16,6 +17,7 @@ namespace SaleManager.Wpf.Admin.ViewModels
     {
         private readonly IRegionManager _regionManager;
         IRegionNavigationJournal _journal;
+        IEventAggregator _ea;
         private AccountCreateModel _account = new AccountCreateModel();
         public DelegateCommand OnSave { get; private set; }
         public DelegateCommand OnBackCommand { get; set; }
@@ -24,9 +26,11 @@ namespace SaleManager.Wpf.Admin.ViewModels
             get { return _account; }
             set { SetProperty(ref _account, value); }
         }
-        public AccountCreateViewModel(IRegionManager regionManager, IDialogService dialogService) : base(dialogService)
+        public AccountCreateViewModel(IRegionManager regionManager, IDialogService dialogService, 
+            IEventAggregator ea) : base(dialogService)
         {
             _regionManager = regionManager;
+            _ea = ea;
             OnSave = new DelegateCommand(Save, CanSave)
                 .ObservesProperty(() => this.Account.FirstName)
                 .ObservesProperty(() => this.Account.LastName);
@@ -50,22 +54,15 @@ namespace SaleManager.Wpf.Admin.ViewModels
                         { "IsEnable", false },
                     };
 
-                    ResponseData response = await RestApiUtils.Instance.Post("api/user/register", content);
-                    if (response.IsSuccess())
+                    bool isSuccess = await RestApiUtils.Instance.Post("api/user/register", content);
+                    if (isSuccess)
                     {
-                        var roles = new List<string>();
-                        //foreach (var currRole in Account.Roles)
-                        //    if (currRole.IsChecked)
-                        //        roles.Add(currRole.Label);
-                        var role = new Dictionary<string, object>{
-                            //{ "Id", Account.Id },
-                            //{ "Roles", roles }
-                        };
-                        response = await RestApiUtils.Instance.Post("api/user/addRole", role);
+                        _ea.GetEvent<NotifSentEvent>().Publish("Tạo tài khoản thành công. " + Environment.NewLine + 
+                            " Liên hệ với quản trị viên để kích hoạt.");
+                        _journal.GoBack();
+                    } else
+                        _ea.GetEvent<NotifSentEvent>().Publish("Có lỗi xảy ra, vui lòng thử lại");
 
-                        if (response.IsSuccess())
-                            _journal.GoBack();
-                    }
                 };
                 ExecuteAction(a);
             }
@@ -77,13 +74,10 @@ namespace SaleManager.Wpf.Admin.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            throw new NotImplementedException();
+            _journal = navigationContext.NavigationService.Journal;
         }
 
-        public bool IsNavigationTarget(NavigationContext navigationContext)
-        {
-            throw new NotImplementedException();
-        }
+        public bool IsNavigationTarget(NavigationContext navigationContext) => true;
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {

@@ -1,7 +1,10 @@
 ﻿using MaterialDesignThemes.Wpf;
+using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
+using SaleManager.Wpf.Admin.Views;
+using SaleManager.Wpf.Inflastructor.Models;
 using SaleManager.Wpf.Models;
 using SaleManager.Wpf.Views;
 using SaleManager.Wpf.Views.Menu;
@@ -18,6 +21,7 @@ namespace SaleManager.Wpf.ViewModels
         private string _title = "Prism Unity Application";
         IContainerExtension _container;
         IRegionManager _regionManager;
+        IEventAggregator _ea;
         public static ApplicationUserModel CurrentUser { set; get; }
         private static SnackbarMessageQueue _snackbar;
         public SnackbarMessageQueue Snackbar
@@ -31,13 +35,22 @@ namespace SaleManager.Wpf.ViewModels
             set { SetProperty(ref _title, value); }
         }
 
-        public MainWindowViewModel(IContainerExtension container, IRegionManager regionManager)
+        public MainWindowViewModel(IContainerExtension container, 
+            IRegionManager regionManager, IEventAggregator ea)
         {
             _container = container;
             _regionManager = regionManager;
+            _ea = ea;
+
             _regionManager.RegisterViewWithRegion("ContentRegion", typeof(LoginView));
+            _ea.GetEvent<NotifSentEvent>().Subscribe(ShowNotification);
             Snackbar = new SnackbarMessageQueue();
             Snackbar.Enqueue("Version 1.0");
+        }
+
+        public void ShowNotification(string notif)
+        {
+            Snackbar.Enqueue(notif);
         }
     }
 }

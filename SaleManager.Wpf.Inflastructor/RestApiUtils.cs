@@ -54,24 +54,35 @@ namespace SaleManager.Wpf.Inflastructor
             token = null;
         }
 
-        public async Task<ResponseData> Post(string url, Dictionary<string, object> content)
+        public async Task<T> Post<T>(string url, Dictionary<string, object> content)
         {
             string json = JsonConvert.SerializeObject(content, Formatting.Indented);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PostAsync(url, stringContent);
             //response.EnsureSuccessStatusCode();
             var result = await response.Content.ReadAsStringAsync();
-            return new ResponseData(result, response.StatusCode);
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(result);
+            return data;
         }
-
-        public async Task<ResponseData> Get(string url)
+        public async Task<bool> Post(string url, Dictionary<string, object> content)
+        {
+            string json = JsonConvert.SerializeObject(content, Formatting.Indented);
+            var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await client.PostAsync(url, stringContent);
+            if (response.IsSuccessStatusCode)
+                return true;
+            else
+                return false;
+        }
+        public async Task<T> Get<T>(string url)
         {
             //string json = JsonConvert.SerializeObject(content, Formatting.Indented);
             //var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await client.GetAsync(url);
             response.EnsureSuccessStatusCode();
             var result = await response.Content.ReadAsStringAsync();
-            return new ResponseData(result, response.StatusCode); 
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(result);
+            return data; 
         }
     }
 }

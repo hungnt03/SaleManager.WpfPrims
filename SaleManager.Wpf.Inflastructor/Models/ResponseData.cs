@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace SaleManager.Wpf.Inflastructor.Models
 {
-    public class ResponseData
+    public class ResponseData<T> where T : class
     {
-        public string Data { set; get; }
+        public T Data { set; get; }
         public HttpStatusCode StatusCode { get; set; }
-        public ResponseData(string data, HttpStatusCode status)
+        public ResponseData(T data, HttpStatusCode status)
         {
             Data = data;
             StatusCode = status;

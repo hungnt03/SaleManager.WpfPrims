@@ -54,7 +54,7 @@ namespace SaleManager.Wpf.ViewModels
         }
         private void CreateAccount()
         {
-            _regionManager.RequestNavigate("ContentMenuRegion", nameof(AccountCreateView));
+            _regionManager.RequestNavigate("ContentRegion", nameof(AccountCreateView));
         }
         private void Login()
         {
@@ -63,8 +63,8 @@ namespace SaleManager.Wpf.ViewModels
                 var logged = await RestApiUtils.Instance.Login(Username, Password);
                 if (logged)
                 {
-                    var response = await RestApiUtils.Instance.Post("api/user/current", new Dictionary<string, object>());
-                    MainWindowViewModel.CurrentUser = Newtonsoft.Json.JsonConvert.DeserializeObject<ApplicationUserModel>(response.Data); ;
+                    var response = await RestApiUtils.Instance.Post<ApplicationUserModel>("api/user/current", new Dictionary<string, object>());
+                    MainWindowViewModel.CurrentUser = response;
                     _regionManager.RequestNavigate("ContentRegion", nameof(MenuView));
                     _regionManager.RegisterViewWithRegion("HeaderRegion", typeof(HeaderView));
                 }

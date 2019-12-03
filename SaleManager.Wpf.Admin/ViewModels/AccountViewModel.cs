@@ -58,25 +58,21 @@ namespace SaleManager.Wpf.Admin.ViewModels
                     { "Id", account.Id }
                 };
 
-                var json = await RestApiUtils.Instance.Get("api/role/roles");
-                var roles = Newtonsoft.Json.JsonConvert.DeserializeObject<List<RoleModel>>(json.Data);
+                var roles = await RestApiUtils.Instance.Get<List<RoleModel>>("api/role/roles");
+                //var roles = Newtonsoft.Json.JsonConvert.DeserializeObject<List<RoleModel>>(json.Data);
                 if (roles != null && roles.Count > 0)
                 {
                     foreach (var role in roles)
                         Account.Roles.Add(new Inflastructor.Models.CheckboxModel(role.Role));
                 }
 
-                json = await RestApiUtils.Instance.Post("api/user/getRoles", content);
-                if (json.IsSuccess())
+                var datas = await RestApiUtils.Instance.Post<List<string>>("api/user/getRoles", content);
+                if (datas != null && datas.Count > 0)
                 {
-                    var datas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(json.Data);
-                    if (datas != null && datas.Count > 0)
-                    {
-                        foreach (var role in datas)
-                            foreach (var checkbox in Account.Roles)
-                                if (role.Equals(checkbox.Label))
-                                    checkbox.IsChecked = true;
-                    }
+                    foreach (var role in datas)
+                        foreach (var checkbox in Account.Roles)
+                            if (role.Equals(checkbox.Label))
+                                checkbox.IsChecked = true;
                 }
             }
             else
@@ -98,8 +94,8 @@ namespace SaleManager.Wpf.Admin.ViewModels
                         { "IsEnable", Account.IsEnable },
                     };
 
-                    ResponseData response = await RestApiUtils.Instance.Post("api/user/update", content);
-                    if (response.IsSuccess())
+                    bool isSuccses = await RestApiUtils.Instance.Post("api/user/update", content);
+                    if (isSuccses)
                     {
                         var roles = new List<string>();
                         foreach (var currRole in Account.Roles)
@@ -109,8 +105,8 @@ namespace SaleManager.Wpf.Admin.ViewModels
                             { "Id", Account.Id },
                             { "Roles", roles }
                         };
-                        response = await RestApiUtils.Instance.Post("api/user/addRole", role);
-                        if (response.IsSuccess())
+                        isSuccses = await RestApiUtils.Instance.Post("api/user/addRole", role);
+                        if (isSuccses)
                             _journal.GoBack();
                     }
                 };

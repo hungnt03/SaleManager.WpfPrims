@@ -67,7 +67,7 @@ namespace SaleManager.Wpf.Admin.Models
         }
 
         [Required(ErrorMessage = "Trường không được để trống")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Vui lòng nhập đúng định dạng email")]
         public string Email
         {
             get { return _email; }
@@ -90,7 +90,7 @@ namespace SaleManager.Wpf.Admin.Models
             }
         }
 
-        [StringLength(100, ErrorMessage = "Mật khẩu phải trên {0} ký tự và dưới {1} ký tự", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "Mật khẩu phải trên {2} ký tự và dưới {1} ký tự", MinimumLength = 6)]
         [Required(ErrorMessage = "Trường không được để trống")]
         [DataType(DataType.Password)]
         public string Password

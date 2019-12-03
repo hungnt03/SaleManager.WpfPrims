@@ -42,8 +42,8 @@ namespace SaleManager.Wpf.Admin.ViewModels
         {
             Accounts = new ObservableCollection<AccountModel>();
             Accounts.Clear();
-            var json = await RestApiUtils.Instance.Post("api/user/users", null);
-            var datas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AccountModel>>(json.Data);
+            var datas = await RestApiUtils.Instance.Post<List<AccountModel>>("api/user/users", null);
+            //var datas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AccountModel>>(json.Data);
             foreach (var elm in datas)
             {
                 Accounts.Add(new AccountModel()

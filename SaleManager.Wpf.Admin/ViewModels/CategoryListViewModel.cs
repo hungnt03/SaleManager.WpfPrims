@@ -33,7 +33,7 @@ namespace SaleManager.Wpf.Admin.ViewModels
                 SetProperty(ref _selectedItem, value);
                 var parameters = new NavigationParameters();
                 parameters.Add("category", value);
-                _regionManager.RequestNavigate("ContentMenuRegion", "CategoryView",parameters);
+                _regionManager.RequestNavigate("ContentMenuRegion", nameof(CategoryView), parameters);
             }
         }
 
@@ -54,8 +54,8 @@ namespace SaleManager.Wpf.Admin.ViewModels
         private async void InitList()
         {
             Categories = new ObservableCollection<CategoryModel>();
-            var json = await RestApiUtils.Instance.Get("api/category/getall");
-            var datas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CategoryModel>>(json.Data);
+            var datas = await RestApiUtils.Instance.Get<List<CategoryModel>>("api/category/getall");
+            //var datas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CategoryModel>>(json.Data);
             foreach (var elm in datas)
             {
                 Categories.Add(new CategoryModel(elm.Id, elm.Name, elm.Description));
