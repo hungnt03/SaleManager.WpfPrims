@@ -20,7 +20,7 @@ namespace SaleManager.Wpf.Admin.ViewModels
         IEventAggregator _ea;
         private AccountCreateModel _account = new AccountCreateModel();
         public DelegateCommand OnSave { get; private set; }
-        public DelegateCommand OnBackCommand { get; set; }
+        public DelegateCommand OnBackCommand { get; }
         public AccountCreateModel Account
         {
             get { return _account; }
@@ -59,7 +59,7 @@ namespace SaleManager.Wpf.Admin.ViewModels
                     {
                         _ea.GetEvent<NotifSentEvent>().Publish("Tạo tài khoản thành công. " + Environment.NewLine + 
                             " Liên hệ với quản trị viên để kích hoạt.");
-                        _journal.GoBack();
+                        //_journal.GoBack();
                     } else
                         _ea.GetEvent<NotifSentEvent>().Publish("Có lỗi xảy ra, vui lòng thử lại");
 
@@ -75,13 +75,13 @@ namespace SaleManager.Wpf.Admin.ViewModels
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             _journal = navigationContext.NavigationService.Journal;
+            OnBackCommand.RaiseCanExecuteChanged();
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext) => true;
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            throw new NotImplementedException();
         }
     }
 }

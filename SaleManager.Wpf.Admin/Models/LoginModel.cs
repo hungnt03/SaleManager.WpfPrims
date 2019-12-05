@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SaleManager.Wpf.Models
+namespace SaleManager.Wpf.Admin.Models
 {
     public class LoginModel : BindableBase
     {

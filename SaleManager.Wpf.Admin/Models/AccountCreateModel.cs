@@ -80,6 +80,7 @@ namespace SaleManager.Wpf.Admin.Models
 
         [Compare("Password", ErrorMessage = "Xác nhận mật khẩu và mật khẩu phải trùng nhau")]
         [DataType(DataType.Password)]
+        [RegularExpression(@"^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)).+$")]
         public string ConfirmPassword
         {
             get { return _confirmPassword; }

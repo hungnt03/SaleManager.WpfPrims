@@ -36,7 +36,7 @@ namespace SaleManager.Wpf.Admin.ViewModels
             var parameters = new NavigationParameters();
             parameters.Add("account", account);
             if (account != null)
-                _regionManager.RequestNavigate("ContentMenuRegion", nameof(AccountView), parameters);
+                _regionManager.RequestNavigate("ContentRegion", nameof(AccountView), parameters);
         }
         private async void InitList()
         {
@@ -67,6 +67,6 @@ namespace SaleManager.Wpf.Admin.ViewModels
 
         public bool IsNavigationTarget(NavigationContext navigationContext) => true;
 
-        public void OnNavigatedFrom(NavigationContext navigationContext){ }
+        public void OnNavigatedFrom(NavigationContext navigationContext){}
     }
 }

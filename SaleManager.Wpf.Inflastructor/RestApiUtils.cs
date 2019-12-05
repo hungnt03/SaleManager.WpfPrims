@@ -25,6 +25,7 @@ namespace SaleManager.Wpf.Inflastructor
 
         private HttpClient client = new HttpClient();
         private TokenModel token = new TokenModel();
+        public static ApplicationUserModel CurrentUser { set; get; }
 
         public bool IsLogged()
         {
@@ -61,6 +62,8 @@ namespace SaleManager.Wpf.Inflastructor
             HttpResponseMessage response = await client.PostAsync(url, stringContent);
             //response.EnsureSuccessStatusCode();
             var result = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                return (T)Activator.CreateInstance(typeof(T));
             var data = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(result);
             return data;
         }

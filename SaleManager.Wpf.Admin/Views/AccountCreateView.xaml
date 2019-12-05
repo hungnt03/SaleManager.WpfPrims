@@ -41,7 +41,7 @@
             </Grid.RowDefinitions>
             <Label Content="Tên đăng nhập" Margin="5"/>
             <TextBox Text="{Binding Account.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                     Grid.Row="0" Grid.Column="1" Margin="5" Width="250"/>
+                     Grid.Row="0" Grid.Column="1" Margin="5" Width="400"/>
             <TextBlock Text="{Binding ElementName=Account.Username, Path=(Validation.Errors)[0].ErrorContent}" 
                        Grid.Row="1" Grid.Column="1"/>
 
@@ -49,7 +49,7 @@
             <PasswordBox 
                 helper:PasswordHelper.Attach="True"
                 helper:PasswordHelper.Password="{Binding Account.Password, Mode=TwoWay}" 
-                Grid.Row="2" Grid.Column="2" Margin="5" Width="250"/>
+                Grid.Row="2" Grid.Column="2" Margin="5" Width="400"/>
             <TextBlock Text="{Binding ElementName=Account.Password, Path=(Validation.Errors)[0].ErrorContent}" 
                        Grid.Row="3" Grid.Column="1"/>
 
@@ -57,24 +57,24 @@
             <PasswordBox 
                 helper:PasswordHelper.Attach="True"
                 helper:PasswordHelper.Password="{Binding Account.ConfirmPassword, Mode=TwoWay}" 
-                Grid.Row="4" Grid.Column="2" Margin="5" Width="250"/>
+                Grid.Row="4" Grid.Column="2" Margin="5" Width="400"/>
             <TextBlock Text="{Binding ElementName=Account.ConfirmPassword, Path=(Validation.Errors)[0].ErrorContent}" 
                        Grid.Row="5" Grid.Column="1"/>
 
             <Label Content="Email" Margin="5" Grid.Column="0" Grid.Row="6"/>
             <TextBox Text="{Binding Account.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                     Grid.Row="6" Grid.Column="2" Margin="5" Width="250"/>
+                     Grid.Row="6" Grid.Column="2" Margin="5" Width="400"/>
             <TextBlock Text="{Binding ElementName=Account.Email, Path=(Validation.Errors)[0].ErrorContent}" 
                        Grid.Row="7" Grid.Column="1"/>
 
             <Label Content="Họ tên" Margin="5" Grid.Column="0" Grid.Row="8"/>
             <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.Column="1">
                 <StackPanel>
-                    <TextBox Text="{Binding Account.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" TextAlignment="Left"/>
+                    <TextBox Text="{Binding Account.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" TextAlignment="Left"/>
                     <TextBlock Text="{Binding ElementName=Account.FirstName, Path=(Validation.Errors)[0].ErrorContent}" />
                 </StackPanel>
                 <StackPanel Margin="5,0,0,0">
-                    <TextBox Text="{Binding Account.LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" TextAlignment="Left"/>
+                    <TextBox Text="{Binding Account.LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="250" TextAlignment="Left"/>
                     <TextBlock Text="{Binding ElementName=Account.LastName, Path=(Validation.Errors)[0].ErrorContent}" />
                 </StackPanel>
             </StackPanel>
@@ -85,8 +85,10 @@
                         Style="{StaticResource MaterialDesignRaisedButton}"
                         Width="100" />
                 <Button
-                    Command="{Binding GoBackCommand}"
-                    Width="100" Background="#b71c1c" Margin="5" Foreground="#ffffff">
+                    Content="Quay lại"
+                    Command="{Binding OnBackCommand}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Width="100" Margin="5">
                 </Button>
             </StackPanel>
         </Grid>

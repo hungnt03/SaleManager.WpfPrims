@@ -135,10 +135,13 @@
     <Compile Include="Converters\BoolConverter.cs" />
     <Compile Include="Converters\DateConverter.cs" />
     <Compile Include="Helpers\PasswordHelper.cs" />
+    <Compile Include="Models\ApplicationUserModel.cs" />
     <Compile Include="Models\CheckboxModel.cs" />
     <Compile Include="Models\NotifSentEvent.cs" />
+    <Compile Include="Models\RegionNames.cs" />
     <Compile Include="Models\ResponseData.cs" />
     <Compile Include="Models\TokenModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="NotifyPropertyChangedExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestApiUtils.cs" />

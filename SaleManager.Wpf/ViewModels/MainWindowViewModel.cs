@@ -5,9 +5,7 @@ using Prism.Mvvm;
 using Prism.Regions;
 using SaleManager.Wpf.Admin.Views;
 using SaleManager.Wpf.Inflastructor.Models;
-using SaleManager.Wpf.Models;
 using SaleManager.Wpf.Views;
-using SaleManager.Wpf.Views.Menu;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +20,7 @@ namespace SaleManager.Wpf.ViewModels
         IContainerExtension _container;
         IRegionManager _regionManager;
         IEventAggregator _ea;
-        public static ApplicationUserModel CurrentUser { set; get; }
+        
         private static SnackbarMessageQueue _snackbar;
         public SnackbarMessageQueue Snackbar
         {
@@ -42,7 +40,7 @@ namespace SaleManager.Wpf.ViewModels
             _regionManager = regionManager;
             _ea = ea;
 
-            _regionManager.RegisterViewWithRegion("ContentRegion", typeof(LoginView));
+            //_regionManager.RegisterViewWithRegion("ContentRegion", typeof(LoginView));
             _ea.GetEvent<NotifSentEvent>().Subscribe(ShowNotification);
             Snackbar = new SnackbarMessageQueue();
             Snackbar.Enqueue("Version 1.0");

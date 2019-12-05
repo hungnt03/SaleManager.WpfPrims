@@ -1,15 +1,14 @@
 ﻿using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Services.Dialogs;
 using SaleManager.Wpf.Admin.Views;
+using SaleManager.Wpf.Admin.Views.Menu;
 using SaleManager.Wpf.Inflastructor;
-using SaleManager.Wpf.Models;
-using SaleManager.Wpf.Views.Menu;
+using SaleManager.Wpf.Inflastructor.Models;
 using System;
 using System.Collections.Generic;
 
-namespace SaleManager.Wpf.ViewModels
+namespace SaleManager.Wpf.Admin.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
@@ -54,7 +53,7 @@ namespace SaleManager.Wpf.ViewModels
         }
         private void CreateAccount()
         {
-            _regionManager.RequestNavigate("ContentRegion", nameof(AccountCreateView));
+            _regionManager.RequestNavigate(RegionNames.ContentRegion, nameof(AccountCreateView));
         }
         private void Login()
         {
@@ -64,9 +63,10 @@ namespace SaleManager.Wpf.ViewModels
                 if (logged)
                 {
                     var response = await RestApiUtils.Instance.Post<ApplicationUserModel>("api/user/current", new Dictionary<string, object>());
-                    MainWindowViewModel.CurrentUser = response;
-                    _regionManager.RequestNavigate("ContentRegion", nameof(MenuView));
+                    RestApiUtils.CurrentUser = response;
+                    _regionManager.RequestNavigate("ContentRegion", nameof(EmptyView));
                     _regionManager.RegisterViewWithRegion("HeaderRegion", typeof(HeaderView));
+                    _regionManager.RequestNavigate("MenuRegion", nameof(MenuView));
                 }
                 else
                     Messenger = "Tên đăng nhập hoặc mật khẩu không đúng!";

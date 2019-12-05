@@ -60,7 +60,11 @@ namespace SaleManager.Wpf.Admin.ViewModels
                 IsEnable = true;
             }
             else
+            {
                 Category = new CategoryModel();
+                IsEnable = false;
+            }
+                
         }
         private void Save()
         {
@@ -80,7 +84,6 @@ namespace SaleManager.Wpf.Admin.ViewModels
                         isSuccess = await RestApiUtils.Instance.Post("api/category/add", content);
                     if (isSuccess) 
                     {
-                        _regionManager.Regions["ContentMenuRegion"].NavigationService.Journal.GoBack();
                         _journal.GoBack();
                     }
                 };
@@ -101,7 +104,7 @@ namespace SaleManager.Wpf.Admin.ViewModels
                     var content = new Dictionary<string, object> { { "id", Category.Id } };
                     var isSuccess = await RestApiUtils.Instance.Post("api/category/delete", content);
                     if (isSuccess)
-                        _journal.GoBack();
+                        _regionManager.RequestNavigate("ContentRegion", nameof(CategoryListView));
                 }
             };
             ExecuteAction(a);

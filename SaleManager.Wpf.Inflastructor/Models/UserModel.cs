@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SaleManager.Wpf.Models
+namespace SaleManager.Wpf.Inflastructor.Models
 {
     public class UserModel
     {

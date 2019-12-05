@@ -1,9 +1,9 @@
 ﻿using Caliburn.Micro;
-using MahApps.Metro.Controls;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
 using SaleManager.Wpf.Admin.ViewModels;
+using SaleManager.Wpf.Inflastructor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace SaleManager.Wpf.ViewModels.Menu
+namespace SaleManager.Wpf.Admin.ViewModels.Menu
 {
     public class MenuViewModel : BindableBase
     {
@@ -25,7 +25,7 @@ namespace SaleManager.Wpf.ViewModels.Menu
             set 
             { 
                 SetProperty(ref _selectedView, value);
-                _regionManager.RequestNavigate("ContentMenuRegion", value.ScreenName);
+                _regionManager.RequestNavigate("ContentRegion", value.ScreenName);
             }
         }
         public MenuViewModel(IRegionManager regionManager)
@@ -37,7 +37,7 @@ namespace SaleManager.Wpf.ViewModels.Menu
                 new MenuDetailViewModel("CategoryListView", "Category", "BrandingWatermark"),
                 new MenuDetailViewModel("CustomerView", "Customer", "HumanMaleFemale"),
             };
-            if (MainWindowViewModel.CurrentUser.Roles.Contains("admin"))
+            if (RestApiUtils.CurrentUser.Roles.Contains("admin"))
                 Menus.Add(new MenuDetailViewModel("AccountListView", "Account", "AccountTie"));
         }
 

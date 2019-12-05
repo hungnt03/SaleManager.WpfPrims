@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SaleManager.Wpf.Views.Menu
+namespace SaleManager.Wpf.Admin.Views
 {
     /// <summary>
-    /// Interaction logic for MenuView.xaml
+    /// Interaction logic for LoginView.xaml
     /// </summary>
-    public partial class MenuView : UserControl
+    public partial class LoginView : UserControl
     {
-        public MenuView()
+        public LoginView()
         {
             InitializeComponent();
         }

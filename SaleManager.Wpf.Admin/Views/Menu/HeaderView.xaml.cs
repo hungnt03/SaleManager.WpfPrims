@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SaleManager.Wpf.Views.Menu
+namespace SaleManager.Wpf.Admin.Views.Menu
 {
     /// <summary>
     /// Interaction logic for HeaderView.xaml

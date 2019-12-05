@@ -8,13 +8,13 @@
         xmlns:local="clr-namespace:SaleManager.Wpf.Views"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        WindowState="Maximized"
         Title="{Binding Title}" Height="500" Width="1000">
     <Grid>
         <materialDesign:Snackbar MessageQueue="{Binding Snackbar}" DockPanel.Dock="Top"/>
         <DockPanel>
             <ContentControl prism:RegionManager.RegionName="HeaderRegion" DockPanel.Dock="Top" />
-            <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+            <ContentControl prism:RegionManager.RegionName="MenuRegion" DockPanel.Dock="Left" />
+            <ContentControl prism:RegionManager.RegionName="ContentRegion" DockPanel.Dock="Right"/>
         </DockPanel>
     </Grid>
     

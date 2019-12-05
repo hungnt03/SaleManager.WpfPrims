@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SaleManager.Wpf.ViewModels.Menu
+namespace SaleManager.Wpf.Admin.ViewModels.Menu
 {
     public class MenuDetailViewModel : BindableBase
     {
