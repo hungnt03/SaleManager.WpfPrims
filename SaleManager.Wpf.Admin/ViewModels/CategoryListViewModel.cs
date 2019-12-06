@@ -32,7 +32,7 @@ namespace SaleManager.Wpf.Admin.ViewModels
             _regionManager = regionManager;
             OnCreate = new DelegateCommand(Create);
             SelectedCommand = new DelegateCommand<CategoryModel>(CategorySelected);
-            InitList();
+            //InitList();
         }
         private void CategorySelected(CategoryModel category)
         {
@@ -53,6 +53,7 @@ namespace SaleManager.Wpf.Admin.ViewModels
         {
             if (Categories == null)
                 Categories = new ObservableCollection<CategoryModel>();
+            Categories.Clear();
             var datas = await RestApiUtils.Instance.Get<List<CategoryModel>>("api/category/getall");
             foreach (var elm in datas)
             {
@@ -63,7 +64,7 @@ namespace SaleManager.Wpf.Admin.ViewModels
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             _journal = navigationContext.NavigationService.Journal;
-            //InitList();
+            InitList();
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext) => true;
