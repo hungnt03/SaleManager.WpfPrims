@@ -8,12 +8,13 @@ using SaleManager.Wpf.Inflastructor.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace SaleManager.Wpf.Admin.ViewModels
 {
     public class CategoryListViewModel : ViewModelBase, INavigationAware
     {
-        private ObservableCollection<CategoryModel> _categories;
+        public ObservableCollection<CategoryModel> _categories;
         private readonly IRegionManager _regionManager;
         IRegionNavigationJournal _journal;
         public DelegateCommand OnCreate { get; private set; }
@@ -21,12 +22,11 @@ namespace SaleManager.Wpf.Admin.ViewModels
         public ObservableCollection<CategoryModel> Categories
         {
             get { return _categories; }
-            set
+            set 
             {
                 SetProperty(ref _categories, value);
             }
         }
-
         public CategoryListViewModel(IRegionManager regionManager, IDialogService dialogService) : base(dialogService)
         {
             _regionManager = regionManager;
@@ -51,14 +51,8 @@ namespace SaleManager.Wpf.Admin.ViewModels
         }
         private async void InitList()
         {
-            if (Categories == null)
-                Categories = new ObservableCollection<CategoryModel>();
-            Categories.Clear();
             var datas = await RestApiUtils.Instance.Get<List<CategoryModel>>("api/category/getall");
-            foreach (var elm in datas)
-            {
-                Categories.Add(new CategoryModel(elm.Id, elm.Name, elm.Description));
-            }
+            Categories = new ObservableCollection<CategoryModel>(datas);
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)

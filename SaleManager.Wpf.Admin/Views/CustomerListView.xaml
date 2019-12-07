@@ -7,6 +7,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel>
@@ -16,8 +17,13 @@
             Width="100" Margin="5" HorizontalAlignment="Right">
             <materialDesign:PackIcon Kind="Add" Width="30" Height="30" VerticalAlignment="Center"/>
         </Button>
-
-        <ListView ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedItem}">
+        <ListView 
+            ItemsSource="{Binding Customers, Mode=TwoWay}" x:Name="_listOfCustomer">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <prism:InvokeCommandAction Command="{Binding SelectedCommand}" CommandParameter="{Binding SelectedItem, ElementName=_listOfCustomer}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Tên khách hàng" />

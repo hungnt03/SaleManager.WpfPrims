@@ -4,6 +4,7 @@ using Prism.Services.Dialogs;
 using SaleManager.Wpf.Admin.Models;
 using SaleManager.Wpf.Admin.Views;
 using SaleManager.Wpf.Inflastructor;
+using SaleManager.Wpf.Inflastructor.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,10 +16,11 @@ namespace SaleManager.Wpf.Admin.ViewModels
 {
     public class CustomerListViewModel : ViewModelBase, INavigationAware
     {
-        private ObservableCollection<CustomerModel> _customers;
-        private CustomerModel _selectedItem;
+        public ObservableCollection<CustomerModel> _customers;
         private readonly IRegionManager _regionManager;
+        IRegionNavigationJournal _journal;
         public DelegateCommand OnCreate { get; private set; }
+        public DelegateCommand<CustomerModel> SelectedCommand { get; private set; }
         public ObservableCollection<CustomerModel> Customers
         {
             get { return _customers; }
@@ -27,45 +29,36 @@ namespace SaleManager.Wpf.Admin.ViewModels
                 SetProperty(ref _customers, value);
             }
         }
-        public CustomerModel SelectedItem
-        {
-            get { return _selectedItem; }
-            set
-            {
-                SetProperty(ref _selectedItem, value);
-                var parameters = new NavigationParameters();
-                parameters.Add("category", value);
-                _regionManager.RequestNavigate("ContentMenuRegion", "CustomerView", parameters);
-            }
-        }
-
         public CustomerListViewModel(IRegionManager regionManager, IDialogService dialogService) : base(dialogService)
         {
             _regionManager = regionManager;
             OnCreate = new DelegateCommand(Create);
-            InitList();
+            SelectedCommand = new DelegateCommand<CustomerModel>(CustomerSelected);
+        }
+        private void CustomerSelected(CustomerModel customer)
+        {
+            var parameters = new NavigationParameters();
+            parameters.Add("customer", customer);
+            if (customer != null)
+                _regionManager.RequestNavigate(RegionNames.ContentRegion, nameof(CustomerView), parameters);
         }
         private void Create()
         {
             Action a = () =>
             {
-                _regionManager.RequestNavigate("ContentMenuRegion", nameof(CustomerView));
+                _regionManager.RequestNavigate(RegionNames.ContentRegion, nameof(CustomerView));
             };
             ExecuteAction(a);
         }
         private async void InitList()
         {
-            Customers = new ObservableCollection<CustomerModel>();
             var datas = await RestApiUtils.Instance.Get<List<CustomerModel>>("api/customer/getall");
-            //var datas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomerModel>>(json.Data);
-            foreach (var elm in datas)
-            {
-                //Customers.Add(new CustomerModel(elm.Id, elm.Name, elm.Description));
-            }
+            Customers = new ObservableCollection<CustomerModel>(datas);
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            _journal = navigationContext.NavigationService.Journal;
             InitList();
         }
 
@@ -73,7 +66,6 @@ namespace SaleManager.Wpf.Admin.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-
         }
     }
 }

@@ -17,7 +17,8 @@
             Width="100" Margin="5" HorizontalAlignment="Right">
             <materialDesign:PackIcon Kind="Add" Width="30" Height="30" VerticalAlignment="Center"/>
         </Button>
-        <ListView ItemsSource="{Binding Categories}" x:Name="_listOfCategory">
+        <ListView 
+            ItemsSource="{Binding Categories, Mode=TwoWay}" x:Name="_listOfCategory">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <prism:InvokeCommandAction Command="{Binding SelectedCommand}" CommandParameter="{Binding SelectedItem, ElementName=_listOfCategory}" />
