@@ -44,6 +44,8 @@ namespace SaleManager.Wpf.Admin
             containerRegistry.RegisterForNavigation<AccountCreateView>();
             containerRegistry.RegisterForNavigation<CustomerListView>();
             containerRegistry.RegisterForNavigation<CustomerView>();
+            containerRegistry.RegisterForNavigation<ProductListView>();
+            containerRegistry.RegisterForNavigation<ProductView>();
 
             containerRegistry.RegisterDialog<ConfirmDialogView, ConfirmDialogViewModel>();
         }

@@ -3,6 +3,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
 using SaleManager.Wpf.Admin.ViewModels;
+using SaleManager.Wpf.Admin.Views;
 using SaleManager.Wpf.Inflastructor;
 using System;
 using System.Collections.Generic;
@@ -34,8 +35,9 @@ namespace SaleManager.Wpf.Admin.ViewModels.Menu
 
             Menus = new BindableCollection<MenuDetailViewModel>()
             {
-                new MenuDetailViewModel("CategoryListView", "Category", "BrandingWatermark"),
-                new MenuDetailViewModel("CustomerListView", "Customer", "HumanMaleFemale"),
+                new MenuDetailViewModel(nameof(CategoryListView), "Category", "BrandingWatermark"),
+                new MenuDetailViewModel(nameof(CustomerListView), "Customer", "ContactPhoneOutline"),
+                new MenuDetailViewModel(nameof(ProductListView), "Product", "Cocktail"),
             };
             if (RestApiUtils.CurrentUser.Roles.Contains("admin"))
                 Menus.Add(new MenuDetailViewModel("AccountListView", "Account", "AccountTie"));

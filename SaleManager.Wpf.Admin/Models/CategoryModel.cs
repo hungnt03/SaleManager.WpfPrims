@@ -1,11 +1,5 @@
-﻿using Prism.Mvvm;
-using SaleManager.Wpf.Inflastructor;
-using System;
-using System.Collections.Generic;
+﻿using SaleManager.Wpf.Inflastructor;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SaleManager.Wpf.Admin.Models
 {
