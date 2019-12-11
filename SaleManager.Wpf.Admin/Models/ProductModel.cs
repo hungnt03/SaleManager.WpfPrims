@@ -14,7 +14,7 @@ namespace SaleManager.Wpf.Admin.Models
         private string _barcode;
         private string _name;
         private Decimal _price;
-        private DateTime _expDate;
+        private DateTime _expirationDate;
         private int _categoryId;
         private int _supplierId;
         private BitmapImage _imageBit;
@@ -72,12 +72,12 @@ namespace SaleManager.Wpf.Admin.Models
                 this.ValidateProperty(value);
             }
         }
-        public DateTime ExpDate
+        public DateTime ExpirationDate
         {
-            get { return _expDate; }
+            get { return _expirationDate; }
             set
             {
-                SetProperty(ref _expDate, value);
+                SetProperty(ref _expirationDate, value);
                 this.ValidateProperty(value);
             }
         }

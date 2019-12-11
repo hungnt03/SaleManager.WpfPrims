@@ -1,22 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
 namespace SaleManager.Wpf.Inflastructor.Converters
 {
-    public class DateConverter : IValueConverter
+    public class MoneyConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            DateTime datetime;
-            if (DateTime.TryParse(value.ToString(), out datetime))
+            Decimal money;
+            CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");
+            if (Decimal.TryParse(value.ToString(), out money))
             {
-                return datetime.ToString("dd/MM/yyyy");
+                return money.ToString("#,###", cul.NumberFormat);
             }
             return DependencyProperty.UnsetValue;
         }

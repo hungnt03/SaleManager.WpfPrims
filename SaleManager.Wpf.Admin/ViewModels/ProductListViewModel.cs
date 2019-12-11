@@ -76,6 +76,13 @@ namespace SaleManager.Wpf.Admin.ViewModels
                 if (!string.IsNullOrEmpty(product.Img))
                     product.ImageBit = new BitmapImage(new Uri(product.Img));
             Products = products;
+
+            var productSearch = new ProductSearchModel();
+            var categories = await RestApiUtils.Instance.Get<List<CategoryModel>>("api/category/getall");
+            productSearch.Categories = new ObservableCollection<CategoryModel>(categories);
+            var supplier = await RestApiUtils.Instance.Get<List<SupplierModel>>("api/supplier/getall");
+            productSearch.Suppliers = new ObservableCollection<SupplierModel>(supplier);
+            ProductSearch = productSearch;
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)

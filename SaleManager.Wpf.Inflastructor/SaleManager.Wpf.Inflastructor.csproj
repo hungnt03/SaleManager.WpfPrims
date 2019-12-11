@@ -134,6 +134,7 @@
     <Compile Include="AddBindableBase.cs" />
     <Compile Include="Converters\BoolConverter.cs" />
     <Compile Include="Converters\DateConverter.cs" />
+    <Compile Include="Converters\MoneyConverter.cs" />
     <Compile Include="Helpers\PasswordHelper.cs" />
     <Compile Include="Models\ApplicationUserModel.cs" />
     <Compile Include="Models\CheckboxModel.cs" />
