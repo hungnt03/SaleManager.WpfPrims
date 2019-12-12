@@ -38,13 +38,11 @@
                 <ComboBox
                     ItemsSource="{Binding ProductSearch.Categories}"
                     DisplayMemberPath="Name"
+                    SelectedValuePath="Id" 
+                    SelectedItem="{Binding ProductSearch.CategorySelected, Mode=TwoWay}"
                     materialDesign:HintAssist.Hint="Danh mục" Width="100"
                     Grid.Row="0" Grid.Column="1" Margin="15,0,0,0" IsEditable="True"
                     Style="{StaticResource MaterialDesignFloatingHintComboBox}">
-                    <ComboBox.Text>
-                        <Binding Path="ProductSearch.CategorySelected" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                        </Binding>
-                    </ComboBox.Text>
                     <ComboBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel />
@@ -54,14 +52,13 @@
                 <ComboBox
                     ItemsSource="{Binding ProductSearch.Suppliers}"
                     DisplayMemberPath="Name"
+                    SelectedValuePath="Id" 
+                    SelectedItem="{Binding ProductSearch.SupplierSelected, Mode=TwoWay}"
                     materialDesign:HintAssist.Hint="Nhà cung cấp"
                     Grid.Row="0" Grid.Column="2" Margin="15,0,0,0"
                     IsEditable="True" Width="100"
                     Style="{StaticResource MaterialDesignFloatingHintComboBox}">
-                    <ComboBox.Text>
-                        <Binding Path="ProductSearch.SupplierSelected" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                        </Binding>
-                    </ComboBox.Text>
+                    
                     <ComboBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel />

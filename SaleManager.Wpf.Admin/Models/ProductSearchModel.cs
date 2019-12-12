@@ -16,7 +16,6 @@ namespace SaleManager.Wpf.Admin.Models
             set
             {
                 SetProperty(ref _supplierSelected, value);
-                this.ValidateProperty(value);
             }
         }
         public ObservableCollection<SupplierModel> Suppliers
@@ -34,7 +33,6 @@ namespace SaleManager.Wpf.Admin.Models
             set
             {
                 SetProperty(ref _categorySelected, value);
-                this.ValidateProperty(value);
             }
         }
         public ObservableCollection<CategoryModel> Categories

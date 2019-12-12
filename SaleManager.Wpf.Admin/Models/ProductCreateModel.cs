@@ -1,6 +1,7 @@
 ﻿using SaleManager.Wpf.Inflastructor;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ using System.Windows.Media.Imaging;
 
 namespace SaleManager.Wpf.Admin.Models
 {
-    public class ProductModel : AddBindableBase
+    public class ProductCreateModel : AddBindableBase
     {
         private string _barcode;
         private string _name;
@@ -23,6 +24,44 @@ namespace SaleManager.Wpf.Admin.Models
         private string _unit;
         private BitmapImage _imageBit;
         private string _img;
+        private ObservableCollection<CategoryModel> _categories;
+        private CategoryModel _categorySelected;
+        private ObservableCollection<SupplierModel> _suppliers;
+        private SupplierModel _supplierSelected;
+        public SupplierModel SupplierSelected
+        {
+            get { return _supplierSelected; }
+            set
+            {
+                SetProperty(ref _supplierSelected, value);
+            }
+        }
+        public ObservableCollection<SupplierModel> Suppliers
+        {
+            get { return _suppliers; }
+            set
+            {
+                SetProperty(ref _suppliers, value);
+                this.ValidateProperty(value);
+            }
+        }
+        public CategoryModel CategorySelected
+        {
+            get { return _categorySelected; }
+            set
+            {
+                SetProperty(ref _categorySelected, value);
+            }
+        }
+        public ObservableCollection<CategoryModel> Categories
+        {
+            get { return _categories; }
+            set
+            {
+                SetProperty(ref _categories, value);
+                this.ValidateProperty(value);
+            }
+        }
 
         public string Unit
         {
@@ -136,7 +175,7 @@ namespace SaleManager.Wpf.Admin.Models
         }
 
         [StringLength(13, ErrorMessage = "Vui lòng nhập {1} ký tự số.")]
-        [RegularExpression("([0-9]+)",ErrorMessage = "Có ký tự không hợp lệ")]
+        [RegularExpression("([0-9]+)", ErrorMessage = "Có ký tự không hợp lệ")]
         public string Barcode
         {
             get { return _barcode; }
@@ -146,6 +185,5 @@ namespace SaleManager.Wpf.Admin.Models
                 this.ValidateProperty(value);
             }
         }
-        
     }
 }
