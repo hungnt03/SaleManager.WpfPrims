@@ -8,8 +8,12 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:converter="clr-namespace:SaleManager.Wpf.Inflastructor.Converters;assembly=SaleManager.Wpf.Inflastructor"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="550" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converter:MoneyConverter x:Key="MoneyConvert"/>
+    </UserControl.Resources>
     <i:Interaction.Triggers>
         <prism:InteractionRequestTrigger SourceObject="{Binding NotificationRequest}">
             <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
@@ -65,17 +69,17 @@
                        Grid.Row="5" Grid.Column="1"/>
 
             <Label Content="Giá sản phẩm" Grid.Row="6" Grid.Column="0" Margin="5"/>
-            <TextBox Text="{Binding Product.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+            <TextBox Text="{Binding Product.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MoneyConvert}}" 
                      Grid.Row="6" Grid.Column="1" Margin="5" Width="300"/>
             <TextBlock Text="{Binding ElementName=Product.Price, Path=(Validation.Errors)[0].ErrorContent}" 
                        Grid.Row="7" Grid.Column="1"/>
 
             <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.Column="1">
                 <ComboBox
-                    ItemsSource="{Binding ProductSearch.Categories}"
+                    ItemsSource="{Binding Product.Categories}"
                     DisplayMemberPath="Name"
                     SelectedValuePath="Id" 
-                    SelectedItem="{Binding ProductSearch.CategorySelected, Mode=TwoWay}"
+                    SelectedItem="{Binding Product.CategorySelected, Mode=TwoWay}"
                     materialDesign:HintAssist.Hint="Danh mục" Width="145"
                     IsEditable="False"
                     Style="{StaticResource MaterialDesignFloatingHintComboBox}">
@@ -86,10 +90,10 @@
                     </ComboBox.ItemsPanel>
                 </ComboBox>
                 <ComboBox
-                    ItemsSource="{Binding ProductSearch.Suppliers}"
+                    ItemsSource="{Binding Product.Suppliers}"
                     DisplayMemberPath="Name"
                     SelectedValuePath="Id" 
-                    SelectedItem="{Binding ProductSearch.SupplierSelected, Mode=TwoWay}"
+                    SelectedItem="{Binding Product.SupplierSelected, Mode=TwoWay}"
                     materialDesign:HintAssist.Hint="Nhà cung cấp"
                     Margin="15,0,0,0" IsEditable="False" Width="145"
                     Style="{StaticResource MaterialDesignFloatingHintComboBox}">
@@ -101,11 +105,11 @@
                 </ComboBox>
             </StackPanel>
 
-            <Label Content="Ghim lên màn hình" Grid.Row="9" Grid.Column="0" Margin="5"/>
+            <Label Content="Ghim lên màn hình" Grid.Row="9" Grid.Column="0" Margin="5,15"/>
             <StackPanel Orientation="Horizontal" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center">
-                <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" Margin="5"/>
-                <Label Content="Hữu hiệu/vô hiệu" Margin="50,5,5,5"/>
-                <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" Margin="5"/>
+                <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" Margin="5,15"/>
+                <Label Content="Vô hiệu/Hữu hiệu" Margin="50,5,5,5"/>
+                <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" Margin="5,15"/>
             </StackPanel>
 
             <Label Content="Hạn sử dụng" Grid.Row="10" Grid.Column="0" Margin="5"/>
@@ -119,6 +123,17 @@
                      Grid.Row="12" Grid.Column="1" Margin="5" Width="300"/>
             <TextBlock Text="{Binding ElementName=Product.Unit, Path=(Validation.Errors)[0].ErrorContent}" 
                        Grid.Row="13" Grid.Column="1"/>
+
+            <Label Content="Ảnh mô tả" Grid.Row="14" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="14" Grid.Column="1" Margin="5" >
+                <Button Command="{Binding OnSelectImage}" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" 
+                    HorizontalAlignment="Left">
+                    <materialDesign:PackIcon Kind="Paperclip" Height="24" Width="24" />
+                </Button>
+                <Image Source="{Binding Product.ImageBit}" HorizontalAlignment="Center" Height="50" Margin="50,0,0,0"/>
+            </StackPanel>
+            <TextBlock Text="{Binding ElementName=Product.Unit, Path=(Validation.Errors)[0].ErrorContent}" 
+                       Grid.Row="15" Grid.Column="1"/>
 
             <StackPanel Orientation="Horizontal" Grid.Row="24" Grid.Column="1" HorizontalAlignment="Right">
                 <Button Content="Lưu"

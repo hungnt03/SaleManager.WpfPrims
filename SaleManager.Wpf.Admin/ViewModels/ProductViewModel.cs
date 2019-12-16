@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace SaleManager.Wpf.Admin.ViewModels
 {
@@ -23,6 +24,7 @@ namespace SaleManager.Wpf.Admin.ViewModels
         IRegionNavigationJournal _journal;
         public DelegateCommand OnSave { get; private set; }
         public DelegateCommand OnDelete { get; private set; }
+        public DelegateCommand OnSelectImage { get; private set; }
         public bool _isEnable = false;
         private string DialogResult { set; get; }
         //public InteractionRequest<IConfirmation> ConfirmationRequest { get; set; }
@@ -48,6 +50,7 @@ namespace SaleManager.Wpf.Admin.ViewModels
             OnSave = new DelegateCommand(Save, CanSave)
                 .ObservesProperty(() => this.Product.Name);
             OnDelete = new DelegateCommand(Delete, CanDelete);
+            OnSelectImage = new DelegateCommand(OpenPopup);
             //ConfirmationRequest = new InteractionRequest<IConfirmation>();
         }
         public async void OnNavigatedTo(NavigationContext navigationContext)
@@ -65,6 +68,8 @@ namespace SaleManager.Wpf.Admin.ViewModels
                 Product = data;
                 Product.Categories = new ObservableCollection<CategoryModel>(categories); 
                 Product.Suppliers = new ObservableCollection<SupplierModel>(suppliers);
+                Product.CategorySelected = categories.Where(c => c.Id == product.CategoryId).FirstOrDefault();
+                Product.SupplierSelected = suppliers.Where(c => c.Id == product.SupplierId).FirstOrDefault();
                 IsEnable = true;
             }
             else
@@ -75,6 +80,16 @@ namespace SaleManager.Wpf.Admin.ViewModels
                 IsEnable = false;
             }
 
+        }
+        public void OpenPopup()
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.DefaultExt = ".jpeg";
+            fileDialog.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png"; // Optional file extensions
+            if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                Product.Img = fileDialog.FileName;
+            }
         }
         private void Save()
         {
