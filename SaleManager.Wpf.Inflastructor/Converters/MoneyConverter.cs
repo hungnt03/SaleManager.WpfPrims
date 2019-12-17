@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SaleManager.Wpf.Inflastructor.Helpers;
+using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -20,7 +21,13 @@ namespace SaleManager.Wpf.Inflastructor.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            if (!string.IsNullOrEmpty(value.ToString()))
+            {
+                var money = value.ToString().Replace(".", "");
+                if (NumberHelpers.IsNumber(money))
+                    return Decimal.Parse(money);
+            }
+            return DependencyProperty.UnsetValue;
         }
     }
 }

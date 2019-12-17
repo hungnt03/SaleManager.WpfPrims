@@ -69,8 +69,9 @@
                        Grid.Row="5" Grid.Column="1"/>
 
             <Label Content="Giá sản phẩm" Grid.Row="6" Grid.Column="0" Margin="5"/>
-            <TextBox Text="{Binding Product.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MoneyConvert}}" 
-                     Grid.Row="6" Grid.Column="1" Margin="5" Width="300"/>
+            <TextBox Text="{Binding Product.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                     Grid.Row="6" Grid.Column="1" Margin="5" Width="300">
+            </TextBox>
             <TextBlock Text="{Binding ElementName=Product.Price, Path=(Validation.Errors)[0].ErrorContent}" 
                        Grid.Row="7" Grid.Column="1"/>
 
@@ -107,9 +108,9 @@
 
             <Label Content="Ghim lên màn hình" Grid.Row="9" Grid.Column="0" Margin="5,15"/>
             <StackPanel Orientation="Horizontal" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center">
-                <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" Margin="5,15"/>
+                <ToggleButton IsChecked="{Binding Product.Pin}" Style="{StaticResource MaterialDesignSwitchToggleButton}" Margin="5,15"/>
                 <Label Content="Vô hiệu/Hữu hiệu" Margin="50,5,5,5"/>
-                <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" Margin="5,15"/>
+                <ToggleButton IsChecked="{Binding Product.Enable}" Style="{StaticResource MaterialDesignSwitchToggleButton}" Margin="5,15"/>
             </StackPanel>
 
             <Label Content="Hạn sử dụng" Grid.Row="10" Grid.Column="0" Margin="5"/>

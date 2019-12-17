@@ -7,38 +7,14 @@ using System.Threading.Tasks;
 
 namespace SaleManager.Wpf.Inflastructor.Models
 {
-    public class ResponseData<T> where T : class
+    public class ResponseData 
     {
-        public T Data { set; get; }
-        public HttpStatusCode StatusCode { get; set; }
-        public ResponseData(T data, HttpStatusCode status)
+        public Object Data { set; get; }
+        public string Messages { get; set; }
+        public ResponseData(Object data, string mess = "")
         {
-            Data = data;
-            StatusCode = status;
-        }
-        public bool IsSuccess()
-        {
-            return StatusCode.Equals(HttpStatusCode.OK);
-        }
-        public string GetMessErr()
-        {
-            string mess = string.Empty;
-            switch (StatusCode)
-            {
-                case HttpStatusCode.BadRequest:
-                    mess = "BadRequest";
-                    break;
-                case HttpStatusCode.NotFound:
-                    mess = "NotFound";
-                    break;
-                case HttpStatusCode.InternalServerError:
-                    mess = "InternalServerError";
-                    break;
-                case HttpStatusCode.ServiceUnavailable:
-                    mess = "ServiceUnavailable";
-                    break;
-            }
-            return mess;
+            this.Data = data;
+            this.Messages = mess;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Prism.Events;
 using SaleManager.Wpf.Inflastructor.Models;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ namespace SaleManager.Wpf.Inflastructor
         private static readonly Lazy<RestApiUtils> lazy = new Lazy<RestApiUtils>(() => new RestApiUtils());
 
         public static RestApiUtils Instance { get { return lazy.Value; } }
+
+        public IEventAggregator _ea { set; private get; }
 
         private RestApiUtils()
         {
@@ -45,8 +48,11 @@ namespace SaleManager.Wpf.Inflastructor
                 return false;
             response.EnsureSuccessStatusCode();
             var jsonStr = await response.Content.ReadAsStringAsync();
-            token = Newtonsoft.Json.JsonConvert.DeserializeObject<TokenModel>(jsonStr);
+            var responseData = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseData>(jsonStr);
+            token = Newtonsoft.Json.JsonConvert.DeserializeObject<TokenModel>(responseData.Data.ToString());
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
+            if (!string.IsNullOrEmpty(responseData.Messages))
+                _ea.GetEvent<NotifSentEvent>().Publish(responseData.Messages);
             return IsLogged();
         }
 
@@ -64,7 +70,10 @@ namespace SaleManager.Wpf.Inflastructor
             var result = await response.Content.ReadAsStringAsync();
             if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 return (T)Activator.CreateInstance(typeof(T));
-            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(result);
+            var responseData = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseData>(result);
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseData.Data.ToString());
+            if (!string.IsNullOrEmpty(responseData.Messages))
+                _ea.GetEvent<NotifSentEvent>().Publish(responseData.Messages);
             return data;
         }
         public async Task<bool> Post(string url, Dictionary<string, object> content)
@@ -84,7 +93,10 @@ namespace SaleManager.Wpf.Inflastructor
             HttpResponseMessage response = await client.GetAsync(url);
             response.EnsureSuccessStatusCode();
             var result = await response.Content.ReadAsStringAsync();
-            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(result);
+            var responseData = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseData>(result);
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseData.Data.ToString());
+            if (!string.IsNullOrEmpty(responseData.Messages))
+                _ea.GetEvent<NotifSentEvent>().Publish(responseData.Messages);
             return data; 
         }
     }

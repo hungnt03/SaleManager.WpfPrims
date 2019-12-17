@@ -1,4 +1,5 @@
 ﻿using Prism.Commands;
+using Prism.Events;
 using Prism.Regions;
 using Prism.Services.Dialogs;
 using SaleManager.Wpf.Admin.Views;
@@ -34,9 +35,10 @@ namespace SaleManager.Wpf.Admin.ViewModels
         public DelegateCommand OnLogin { get; private set; }
         public DelegateCommand OnCreateAccount { get; private set; }
         public DelegateCommand OnFogotPassword { get; private set; }
-        public LoginViewModel(IRegionManager regionManager, IDialogService dialogService):base(dialogService)
+        public LoginViewModel(IRegionManager regionManager, IDialogService dialogService, IEventAggregator ea) :base(dialogService)
         {
             _regionManager = regionManager;
+            RestApiUtils.Instance._ea = ea;
             OnLogin = new DelegateCommand(Login, CanLogin)
                 .ObservesProperty(() => this.Username)
                 .ObservesProperty(() => this.Password);

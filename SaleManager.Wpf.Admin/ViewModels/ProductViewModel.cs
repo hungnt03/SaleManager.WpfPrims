@@ -101,13 +101,12 @@ namespace SaleManager.Wpf.Admin.ViewModels
                         { "Barcode", Product.Barcode },
                         { "Name", Product.Name },
                         { "Price", Product.Price },
-                        { "CategoryId", Product.CategoryId },
-                        { "SupplierId", Product.SupplierId },
+                        { "CategoryId", Product.CategorySelected.Id },
+                        { "SupplierId", Product.SupplierSelected.Id },
                         { "Pin", Product.Pin },
                         { "ExpirationDate", Product.ExpirationDate },
                         { "Unit", Product.Unit },
-                        { "Price", Product.Price },
-                        { "Img", Product.Img },
+                        { "Img", Product.Img }
                     };
                     bool isSuccess = false;
                     if (IsEnable)

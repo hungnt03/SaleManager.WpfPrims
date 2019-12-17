@@ -28,6 +28,10 @@ namespace SaleManager.Wpf.Admin.Models
         private CategoryModel _categorySelected;
         private ObservableCollection<SupplierModel> _suppliers;
         private SupplierModel _supplierSelected;
+        public ProductCreateModel()
+        {
+            ExpirationDate = DateTime.Now;
+        }
         public SupplierModel SupplierSelected
         {
             get { return _supplierSelected; }
