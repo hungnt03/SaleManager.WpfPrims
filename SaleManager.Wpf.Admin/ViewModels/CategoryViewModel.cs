@@ -77,15 +77,35 @@ namespace SaleManager.Wpf.Admin.ViewModels
                         { "Name", Category.Name },
                         { "Description", Category.Description },
                     };
-                    bool isSuccess = false;
-                    if (IsEnable)
-                        isSuccess = await RestApiUtils.Instance.Post("api/category/update", content);
-                    else
-                        isSuccess = await RestApiUtils.Instance.Post("api/category/add", content);
-                    if (isSuccess) 
+                    //Update
+                    if (IsEnable && await RestApiUtils.Instance.Post("api/category/update", content))
                     {
                         _journal.GoBack();
                     }
+                    //Add
+                    var addedData = await RestApiUtils.Instance.Post<CategoryModel>("api/category/add", content);
+                    if (addedData != null)
+                    {
+                        var parameters = new NavigationParameters();
+                        parameters.Add("categoryAdd", addedData);
+                        _regionManager.RequestNavigate(RegionNames.ContentRegion, nameof(CategoryListView), parameters);
+                    }
+                    //bool isSuccess = false;
+                    //if (IsEnable)
+                    //    isSuccess = await RestApiUtils.Instance.Post("api/category/update", content);
+                    //else
+                    //    isSuccess = await RestApiUtils.Instance.Post("api/category/add", content);
+                    //if (isSuccess) 
+                    //{
+                    //    if(IsEnable)
+                    //        _journal.GoBack();
+                    //    else
+                    //    {
+                    //        var parameters = new NavigationParameters();
+                    //        parameters.Add("category", content);
+                    //    }
+
+                    //}
                 };
                 ExecuteAction(a);
             }
@@ -104,7 +124,11 @@ namespace SaleManager.Wpf.Admin.ViewModels
                     var content = new Dictionary<string, object> { { "id", Category.Id } };
                     var isSuccess = await RestApiUtils.Instance.Post("api/category/delete", content);
                     if (isSuccess)
-                        _regionManager.RequestNavigate("ContentRegion", nameof(CategoryListView));
+                    {
+                        var parameters = new NavigationParameters();
+                        parameters.Add("categoryDelete", Category);
+                        _regionManager.RequestNavigate(RegionNames.ContentRegion, nameof(CategoryListView), parameters);
+                    }
                 }
             };
             ExecuteAction(a);

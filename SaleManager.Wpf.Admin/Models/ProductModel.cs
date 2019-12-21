@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
@@ -23,7 +24,17 @@ namespace SaleManager.Wpf.Admin.Models
         private string _unit;
         private BitmapImage _imageBit;
         private string _img;
+        private StreamContent _imageStream;
 
+        public StreamContent ImageStream
+        {
+            get { return _imageStream; }
+            set
+            {
+                SetProperty(ref _imageStream, value);
+                this.ValidateProperty(value);
+            }
+        }
         public string Unit
         {
             get { return _unit; }

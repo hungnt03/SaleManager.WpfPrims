@@ -32,7 +32,7 @@ namespace SaleManager.Wpf.Admin.ViewModels
             _regionManager = regionManager;
             OnCreate = new DelegateCommand(Create);
             SelectedCommand = new DelegateCommand<CategoryModel>(CategorySelected);
-            //InitList();
+            InitList();
         }
         private void CategorySelected(CategoryModel category)
         {
@@ -58,7 +58,16 @@ namespace SaleManager.Wpf.Admin.ViewModels
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             _journal = navigationContext.NavigationService.Journal;
-            InitList();
+            var category = navigationContext.Parameters["categoryAdd"] as CategoryModel;
+            if (category != null)
+                Categories.Add(category);
+            category = navigationContext.Parameters["categoryDelete"] as CategoryModel;
+            if (category != null)
+            {
+                foreach(var elm in Categories)
+                    if (elm.Id == category.Id)
+                        Categories.Remove(elm);
+            }
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext) => true;
